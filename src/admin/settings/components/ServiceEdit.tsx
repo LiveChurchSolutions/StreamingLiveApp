@@ -1,13 +1,13 @@
 import React from "react";
 import { Row, FormGroup, Col, InputGroup } from "react-bootstrap"
 import { AdminServiceInterface, ApiHelper, InputBox, Duration } from ".";
-import { DateHelper } from "../../../helpers";
+import { DateHelper, UniqueIdHelper } from "../../../helpers";
 
 interface Props { currentService: AdminServiceInterface, updatedFunction?: () => void }
 
 export const ServiceEdit: React.FC<Props> = (props) => {
     const [currentService, setCurrentService] = React.useState<AdminServiceInterface>(null);
-    const checkDelete = () => { if (currentService?.id > 0) return handleDelete; else return null; }
+    const checkDelete = () => { if (!UniqueIdHelper.isMissing(currentService?.id)) return handleDelete; else return null; }
     const handleCancel = () => { props.updatedFunction(); }
 
     const handleDelete = () => {

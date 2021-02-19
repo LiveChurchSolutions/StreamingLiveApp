@@ -6,7 +6,7 @@ import { EditorState, ContentState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { PageInterface, ApiHelper, InputBox } from "."
-import { EnvironmentHelper } from "../../../helpers";
+import { EnvironmentHelper, UniqueIdHelper } from "../../../helpers";
 
 
 interface Props { page: PageInterface, updatedFunction: () => void }
@@ -20,7 +20,7 @@ export const PageEdit: React.FC<Props> = (props) => {
             ApiHelper.delete("/pages/" + page.id, "StreamingLiveApi").then(() => { setPage(null); props.updatedFunction(); });
         }
     }
-    const checkDelete = () => { if (page?.id > 0) return handleDelete; else return null; }
+    const checkDelete = () => { if (!UniqueIdHelper.isMissing(page?.id)) return handleDelete; else return null; }
     const handleCancel = () => { props.updatedFunction(); }
 
 

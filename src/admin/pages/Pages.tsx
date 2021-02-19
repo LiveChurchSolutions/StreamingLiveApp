@@ -7,7 +7,7 @@ export const Pages = () => {
     const [currentPage, setCurrentPage] = React.useState<PageInterface>(null);
 
     const loadData = () => { ApiHelper.get("/pages", "StreamingLiveApi").then(data => setPages(data)); }
-    const loadPage = (id: number) => { ApiHelper.get("/pages/" + id + "?include=content", "StreamingLiveApi").then(data => setCurrentPage(data)); }
+    const loadPage = (id: string) => { ApiHelper.get("/pages/" + id + "?include=content", "StreamingLiveApi").then(data => setCurrentPage(data)); }
     const handleUpdate = () => { setCurrentPage(null); loadData(); }
     const handleAdd = () => { setCurrentPage({ churchId: UserHelper.currentChurch.id, lastModified: new Date(), name: "" }) }
     const handleEdit = (page: PageInterface) => { loadPage(page.id); }

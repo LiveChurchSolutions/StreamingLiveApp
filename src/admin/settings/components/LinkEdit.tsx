@@ -1,12 +1,12 @@
 import React from "react";
-import { InputBox, LinkInterface, ApiHelper } from "."
+import { InputBox, LinkInterface, ApiHelper, UniqueIdHelper } from "."
 
 interface Props { currentLink: LinkInterface, updatedFunction?: () => void }
 
 export const LinkEdit: React.FC<Props> = (props) => {
     const [currentLink, setCurrentLink] = React.useState<LinkInterface>(null);
     const handleDelete = () => { ApiHelper.delete("/links/" + currentLink.id, "StreamingLiveApi").then(() => { setCurrentLink(null); props.updatedFunction(); }); }
-    const checkDelete = () => { if (currentLink?.id > 0) return handleDelete; else return null; }
+    const checkDelete = () => { if (!UniqueIdHelper.isMissing(currentLink?.id)) return handleDelete; else return null; }
     const handleCancel = () => { props.updatedFunction(); }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

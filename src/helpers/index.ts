@@ -1,4 +1,4 @@
-export { ApiHelper, DateHelper } from "../appBase/helpers";
+export { ApiHelper, DateHelper, UniqueIdHelper } from "../appBase/helpers";
 
 export * from "./ChatHelper"
 export * from "./ConfigHelper"

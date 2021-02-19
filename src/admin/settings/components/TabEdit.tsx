@@ -1,12 +1,12 @@
 import React from "react";
-import { InputBox, LinkInterface, ApiHelper, PageInterface, UserHelper } from "."
+import { InputBox, LinkInterface, ApiHelper, PageInterface, UserHelper, UniqueIdHelper } from "."
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }
 
 export const TabEdit: React.FC<Props> = (props) => {
     const [currentTab, setCurrentTab] = React.useState<LinkInterface>(null);
     const [pages, setPages] = React.useState<PageInterface[]>(null);
-    const checkDelete = () => { if (currentTab?.id > 0) return handleDelete; else return null; }
+    const checkDelete = () => { if (!UniqueIdHelper.isMissing(currentTab?.id)) return handleDelete; else return null; }
     const handleCancel = () => { props.updatedFunction(); }
     const loadPages = () => { ApiHelper.get("/pages/", "StreamingLiveApi").then((data: PageInterface[]) => setPages(data)) }
 
