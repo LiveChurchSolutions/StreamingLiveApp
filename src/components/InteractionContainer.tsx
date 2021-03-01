@@ -1,5 +1,6 @@
 import React from "react";
-import { TabInterface, Chat, HostChat, RequestPrayer, ReceivePrayer, ChatHelper, ChatStateInterface } from ".";
+import { TabInterface, Chat, HostChat, RequestPrayer, ReceivePrayer, ChatHelper, ChatStateInterface, AttendanceInterface, MessageInterface } from ".";
+import { SocketHelper } from "../helpers/SocketHelper";
 
 interface Props {
     tabs: TabInterface[],
@@ -8,6 +9,37 @@ interface Props {
 
 export const InteractionContainer: React.FC<Props> = (props) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
+
+
+    const handleAttendance = (attendance: AttendanceInterface) => {
+    }
+
+    const handleCallout = (message: MessageInterface) => {
+    }
+
+    const handleDelete = (messageId: string) => {
+    }
+
+    const handleMessage = (message: MessageInterface) => {
+    }
+
+    const handlePrayerRequest = (conversationId: string) => {
+    }
+
+    const initChat = () => {
+        SocketHelper.init({
+            attendanceHandler: handleAttendance,
+            calloutHandler: handleCallout,
+            deleteHandler: handleDelete,
+            messageHandler: handleMessage,
+            prayerRequestHandler: handlePrayerRequest
+        });
+    }
+
+
+
+
+
 
     const selectTab = (index: number) => { setSelectedTab(index); }
 

@@ -3,7 +3,8 @@ import { ApiHelper } from "../appBase/helpers/ApiHelper";
 export class EnvironmentHelper {
     private static AccessApi = "";
     static StreamingLiveApi = "";
-    static ChatApiUrl = "";
+    static MessagingApi = "";
+    static MessagingSocket = "";
     static AdminUrl = "";
     static ContentRoot = "";
     static SubUrl = "";
@@ -19,6 +20,7 @@ export class EnvironmentHelper {
         ApiHelper.apiConfigs = [
             { keyName: "AccessApi", url: EnvironmentHelper.AccessApi, jwt: "", permisssions: [] },
             { keyName: "StreamingLiveApi", url: EnvironmentHelper.StreamingLiveApi, jwt: "", permisssions: [] },
+            { keyName: "MessagingApi", url: EnvironmentHelper.MessagingApi, jwt: "", permisssions: [] },
         ];
         ApiHelper.defaultApi = "StreamingLiveApi";
     }
@@ -26,7 +28,8 @@ export class EnvironmentHelper {
     static initDev = () => {
         EnvironmentHelper.AccessApi = process.env.REACT_APP_ACCESS_API || "";
         EnvironmentHelper.StreamingLiveApi = process.env.REACT_APP_STREAMINGLIVE_API || "";
-        EnvironmentHelper.ChatApiUrl = process.env.REACT_APP_CHAT_API || "";
+        EnvironmentHelper.MessagingApi = process.env.REACT_APP_MESSAGING_API || "";
+        EnvironmentHelper.MessagingSocket = process.env.REACT_APP_MESSAGING_SOCKET || "";
         EnvironmentHelper.AdminUrl = process.env.REACT_APP_ADMIN_URL || "";
         EnvironmentHelper.ContentRoot = process.env.REACT_APP_CONTENT_ROOT || "";
         EnvironmentHelper.SubUrl = process.env.REACT_APP_SUB_URL || "";
@@ -37,7 +40,8 @@ export class EnvironmentHelper {
     static initStaging = () => {
         EnvironmentHelper.AccessApi = "https://accessapi.staging.churchapps.org";
         EnvironmentHelper.StreamingLiveApi = "https://api.staging.streaminglive.church";
-        EnvironmentHelper.ChatApiUrl = "wss://chat.staging.streaminglive.church";
+        EnvironmentHelper.MessagingApi = "https://messaging.staging.churchapps.org";
+        EnvironmentHelper.MessagingSocket = "wss://socket.staging.churchapps.org";
         EnvironmentHelper.AdminUrl = "https://admin.staging.streaminglive.church";
         EnvironmentHelper.ContentRoot = "";
         EnvironmentHelper.SubUrl = "https://{key}.staging.streaminglive.church";
@@ -48,7 +52,8 @@ export class EnvironmentHelper {
     static initProd = () => {
         EnvironmentHelper.AccessApi = "https://accessapi.churchapps.org";
         EnvironmentHelper.StreamingLiveApi = "https://api.streaminglive.church";
-        EnvironmentHelper.ChatApiUrl = "wss://chat.streaminglive.church";
+        EnvironmentHelper.MessagingApi = "https://messaging.churchapps.org";
+        EnvironmentHelper.MessagingSocket = "wss://socket.churchapps.org";
         EnvironmentHelper.AdminUrl = "https://admin.streaminglive.church";
         EnvironmentHelper.ContentRoot = "";
         EnvironmentHelper.SubUrl = "https://{key}.streaminglive.church";
