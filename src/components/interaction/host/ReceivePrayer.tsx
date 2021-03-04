@@ -1,9 +1,13 @@
 import React from "react";
-import { ChatStateInterface, ChatSend, ConfigHelper, ChatHelper, ChatReceive } from ".";
+//import { ChatSend, ChatReceive } from "./"
+import { ChatStateInterface, ConfigHelper, ChatHelper } from "../../../helpers";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean }
 
+
 export const ReceivePrayer: React.FC<Props> = (props) => {
+    return <></>;
+    /*
     const [prayerGuid, setPrayerGuid] = React.useState("");
     const [prayerName, setPrayerName] = React.useState("");
 
@@ -44,7 +48,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         {getRequests()}
         {getChat()}
     </div>
-
+*/
 }
 
 

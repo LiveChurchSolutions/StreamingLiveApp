@@ -1,5 +1,5 @@
 import React from "react";
-import { UserInterface, ApiHelper } from ".";
+import { UserInterface, ApiHelper } from "../../../helpers";
 
 interface Props {
     user: UserInterface,

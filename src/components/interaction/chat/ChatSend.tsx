@@ -1,7 +1,8 @@
 import React, { KeyboardEvent } from "react";
-import { ChatHelper, Emojis } from ".";
+import { Emojis } from ".";
+import { ChatHelper, ChatRoomInterface } from "../../../helpers"
 
-interface Props { room: string }
+interface Props { room: ChatRoomInterface }
 
 export const ChatSend: React.FC<Props> = (props) => {
     const [message, setMessage] = React.useState("");
@@ -13,7 +14,7 @@ export const ChatSend: React.FC<Props> = (props) => {
     }
 
     const sendMessage = () => {
-        ChatHelper.sendMessage(props.room, message);
+        //ChatHelper.sendMessage(props.room, message);
         setMessage("");
     }
 

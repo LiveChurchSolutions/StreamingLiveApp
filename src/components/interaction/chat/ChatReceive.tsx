@@ -1,14 +1,15 @@
 import React from "react";
-import { ChatMessage, ChatRoomInterface } from ".";
+import { ChatMessage } from ".";
+import { ChatRoomInterface, ChatUserInterface } from "../../../helpers";
 
-interface Props { room: ChatRoomInterface }
+interface Props { room: ChatRoomInterface, user: ChatUserInterface }
 
 export const ChatReceive: React.FC<Props> = (props) => {
     const getMessages = () => {
         var result = [];
         if (props.room?.messages !== undefined) {
             for (let i = 0; i < props.room.messages.length; i++) {
-                result.push(<ChatMessage key={i} message={props.room.messages[i]} roomName={props.room.roomName} />);
+                result.push(<ChatMessage key={i} message={props.room.messages[i]} conversationId={props.room.conversationId} user={props.user} />);
             }
         }
         setTimeout(() => {

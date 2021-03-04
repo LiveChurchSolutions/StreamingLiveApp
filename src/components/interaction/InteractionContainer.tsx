@@ -1,44 +1,25 @@
 import React from "react";
-import { TabInterface, Chat, HostChat, RequestPrayer, ReceivePrayer, ChatHelper, ChatStateInterface, AttendanceInterface, MessageInterface } from ".";
-import { SocketHelper } from "../helpers/SocketHelper";
+import { TabInterface, Chat, HostChat, RequestPrayer, ReceivePrayer } from "..";
+import { ChatStateInterface } from "../../helpers";
+
 
 interface Props {
     tabs: TabInterface[],
-    chatState: ChatStateInterface | undefined
+    chatState: ChatStateInterface
 }
 
 export const InteractionContainer: React.FC<Props> = (props) => {
     const [selectedTab, setSelectedTab] = React.useState(0);
 
 
-    const handleAttendance = (attendance: AttendanceInterface) => {
-    }
-
-    const handleCallout = (message: MessageInterface) => {
-    }
-
-    const handleDelete = (messageId: string) => {
-    }
-
-    const handleMessage = (message: MessageInterface) => {
-    }
-
-    const handlePrayerRequest = (conversationId: string) => {
-    }
-
-    const initChat = () => {
-        SocketHelper.init({
-            attendanceHandler: handleAttendance,
-            calloutHandler: handleCallout,
-            deleteHandler: handleDelete,
-            messageHandler: handleMessage,
-            prayerRequestHandler: handlePrayerRequest
-        });
-    }
-
-
-
-
+    /*
+        const initChat = () => {
+            setTimeout(function () {
+                ChatHelper.init((state: ChatStateInterface) => { setChatState(state); setConfig(ConfigHelper.current); });
+                setChatState(ChatHelper.state);
+            }, 500);
+        }
+    */
 
 
     const selectTab = (index: number) => { setSelectedTab(index); }
@@ -63,7 +44,18 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
     const getIframe = (tab: TabInterface, i: number, visible: boolean) => {
         return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}><iframe src={tab.url} frameBorder="0" title={"frame" + i.toString()}></iframe></div>)
+    }
 
+    /*
+    const getMainConversation = () => {
+        if (props.chatState.rooms.length > 0) return props.chatState.rooms[0].conversationId;
+        else return "";
+    }*/
+
+    const getChat = () => {
+        const room = (props.chatState.rooms.length > 0) ? props.chatState.rooms[0] : null;
+        if (room === null) return <></>
+        else return <Chat key={room.conversationId} room={room} user={props.chatState.user} visible={true} />;
     }
 
 
@@ -81,13 +73,13 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
                 switch (t.type) {
                     case "chat":
-                        result.push(<Chat key={i} chatState={props.chatState} visible={visible} />);
+                        result.push(getChat());
                         break;
                     case "hostchat":
                         result.push(<HostChat key={i} chatState={props.chatState} visible={visible} />);
                         break;
                     case "prayer":
-                        if (ChatHelper.user.isHost) result.push(<ReceivePrayer key={i} chatState={props.chatState} visible={visible} />);
+                        if (props.chatState.user.isHost) result.push(<ReceivePrayer key={i} chatState={props.chatState} visible={visible} />);
                         else result.push(<RequestPrayer key={i} chatState={props.chatState} visible={visible} />);
                         break;
                     case "page":

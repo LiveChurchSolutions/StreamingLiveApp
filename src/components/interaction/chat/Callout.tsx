@@ -1,7 +1,8 @@
 import React from "react";
-import { ChatHelper } from ".";
+import { ChatHelper, ChatRoomInterface, ChatUserInterface } from "../../../helpers";
 
-interface Props { callout: string, roomName: string }
+
+interface Props { room: ChatRoomInterface, user: ChatUserInterface }
 
 export const Callout: React.FC<Props> = (props) => {
 
@@ -13,7 +14,7 @@ export const Callout: React.FC<Props> = (props) => {
 
     const handleUpdate = (e: React.MouseEvent) => {
         e.preventDefault();
-        ChatHelper.setCallout(props.roomName, message);
+        //ChatHelper.setCallout(props.roomName, message);
         setEdit(false);
     }
 
@@ -27,15 +28,15 @@ export const Callout: React.FC<Props> = (props) => {
     }
 
 
-    if (ChatHelper.user?.isHost) {
+    if (props.user?.isHost) {
         if (edit) return getEditSection();
         else {
-            if (props.callout === "") return <div id="callout"><a href="about:blank" onClick={editMode}>Set Callout</a></div>;
-            else return (<div id="callout"><span style={{ float: "right" }}><a href="about:blank" onClick={editMode}><i className="fas fa-pencil-alt"></i></a></span>{ChatHelper.insertLinks(props.callout)}</div>);
+            if (props.room.callout?.content === "") return <div id="callout"><a href="about:blank" onClick={editMode}>Set Callout</a></div>;
+            else return (<div id="callout"><span style={{ float: "right" }}><a href="about:blank" onClick={editMode}><i className="fas fa-pencil-alt"></i></a></span>{ChatHelper.insertLinks(props.room.callout?.content || "")}</div>);
         }
     } else {
-        if (props.callout === "") return null;
-        else return (<div id="callout">{ChatHelper.insertLinks(props.callout)}</div>);
+        if (props.room.callout?.content === "") return null;
+        else return (<div id="callout">{ChatHelper.insertLinks(props.room.callout.content)}</div>);
     }
 }
 

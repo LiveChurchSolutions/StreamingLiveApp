@@ -1,9 +1,11 @@
 import React from "react";
-import { ChatStateInterface, ChatSend, ConfigHelper, ChatHelper, ChatReceive } from ".";
+import { ChatStateInterface, ChatSend, ConfigHelper, ChatHelper, ChatReceive } from "..";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean }
 
 export const RequestPrayer: React.FC<Props> = (props) => {
+    return <></>
+    /*
     const [prayerGuid, setPrayerGuid] = React.useState("");
 
     const requestPrayer = (e: React.MouseEvent) => {
@@ -22,7 +24,7 @@ export const RequestPrayer: React.FC<Props> = (props) => {
         Need prayer?  Start a private chat session with one of our hosts.
         <button id="requestPrayerButton" className="btn btn-primary btn-block" onClick={requestPrayer}>Request Prayer</button>
     </div>);
-
+    */
 }
 
 
