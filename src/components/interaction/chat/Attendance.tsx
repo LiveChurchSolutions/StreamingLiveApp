@@ -32,7 +32,7 @@ export const Attendance: React.FC<Props> = (props) => {
             for (let i = 0; i < props.attendance.viewers.length; i++) {
                 var v = props.attendance.viewers[i];
                 var countSpan = (v.count > 1) ? <span>({v.count})</span> : null;
-                people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.displayName} {countSpan}</div>);
+                people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.name} {countSpan}</div>);
             }
             result = <div id="attendance">{people}</div>
         }

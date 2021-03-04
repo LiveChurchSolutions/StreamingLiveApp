@@ -4,12 +4,12 @@ import { SocketHelper } from "./SocketHelper";
 
 export class ChatHelper {
 
-    static current: ChatStateInterface = { rooms: [], chatEnabled: false, user: { displayName: "Anonymous", isHost: false }, mainConversationId: "" };
+    static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, prayerRoom: null, user: { displayName: "Anonymous", isHost: false } };
     static onChange: () => void;
 
 
-    static initChat = () => {
-        SocketHelper.init({
+    static initChat = async () => {
+        return SocketHelper.init({
             attendanceHandler: ChatHelper.handleAttendance,
             calloutHandler: ChatHelper.handleCallout,
             deleteHandler: ChatHelper.handleDelete,
@@ -19,6 +19,11 @@ export class ChatHelper {
     }
 
     static handleAttendance = (attendance: AttendanceInterface) => {
+        const room = ChatHelper.getRoom(attendance.conversationId);
+        if (room !== null) {
+            room.attendance = attendance;
+            ChatHelper.onChange();
+        }
     }
 
     static handleCallout = (message: MessageInterface) => {
@@ -28,25 +33,23 @@ export class ChatHelper {
     }
 
     static handleMessage = (message: MessageInterface) => {
-        const room = ChatHelper.getOrCreateRoom(message.conversationId);
-        room.messages.push(message);
-        ChatHelper.onChange();
+        const room = ChatHelper.getRoom(message.conversationId);
+        if (room !== null) {
+            room.messages.push(message);
+            ChatHelper.onChange();
+        }
     }
 
     static handlePrayerRequest = (conversationId: string) => {
     }
 
-    static setMainConversationId = (conversationId: string) => {
-        ChatHelper.current.mainConversationId = conversationId;
-        ChatHelper.onChange();
-    }
 
-
-    static getOrCreateRoom = (conversationId: string): ChatRoomInterface => {
-        ChatHelper.current.rooms.forEach(r => {
-            if (r.conversationId === conversationId) return r;
-        });
-        return { attendance: null, conversationId: conversationId, messages: [], callout: null }
+    static getRoom = (conversationId: string): ChatRoomInterface => {
+        const c = ChatHelper.current
+        if (c.mainRoom?.conversationId === conversationId) return c.mainRoom;
+        else if (c.hostRoom?.conversationId === conversationId) return c.hostRoom;
+        else if (c.prayerRoom?.conversationId === conversationId) return c.prayerRoom;
+        else return null;
     }
 
     static insertLinks(text: string) {

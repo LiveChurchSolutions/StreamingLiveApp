@@ -52,13 +52,6 @@ export const InteractionContainer: React.FC<Props> = (props) => {
         else return "";
     }*/
 
-    const getChat = () => {
-        const room = (props.chatState.rooms.length > 0) ? props.chatState.rooms[0] : null;
-        if (room === null) return <></>
-        else return <Chat key={room.conversationId} room={room} user={props.chatState.user} visible={true} />;
-    }
-
-
     const getItems = () => {
         var result = [];
         if (props.tabs != null) {
@@ -73,7 +66,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
                 switch (t.type) {
                     case "chat":
-                        result.push(getChat());
+                        if (props.chatState.mainRoom !== null) return <Chat key={props.chatState.mainRoom.conversationId} room={props.chatState.mainRoom} user={props.chatState.user} visible={true} />;
                         break;
                     case "hostchat":
                         result.push(<HostChat key={i} chatState={props.chatState} visible={visible} />);

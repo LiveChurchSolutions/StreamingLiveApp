@@ -5,7 +5,6 @@ import { Routing } from "./Routing";
 
 const App: React.FC = () => {
     //const getHandler = () => { return (ApiHelper.jwt === "") ? <Unauthenticated /> : <Authenticated />; }
-    console.log("APP");
 
     return (
         <UserProvider>

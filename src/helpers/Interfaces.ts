@@ -7,7 +7,9 @@ export interface PageInterface { id?: string, churchId?: string, name?: string, 
 export interface AdminServiceInterface { id?: string, churchId?: string, serviceTime?: Date, earlyStart?: number, duration: number, chatBefore: number, chatAfter: number, provider: string, providerKey: string, videoUrl: string, timezoneOffset: number, recurring: boolean, label: string }
 export interface SettingInterface { id?: string, churchId?: string, homePageUrl?: string, logoUrl?: string, primaryColor?: string, contrastColor?: string, registrationDate?: Date }
 
-export interface ViewerInterface { displayName: string, count: number }
+
+export interface ConnectionInterface { churchId: string, conversationId: string, displayName: string, socketId: string }
+export interface ViewerInterface { name: string, count: number }
 export interface AttendanceInterface { viewers?: ViewerInterface[], totalViewers?: number, conversationId: string }
 export interface ConversationInterface { id?: string, churchId?: string, contentType: string, contentId: string, title: string, dateCreated: Date }
 export interface MessageInterface { id?: string, churchId?: string, conversationId?: string, userId?: string, displayName?: string, timeSent?: Date, messageType?: string, content?: string }
@@ -31,5 +33,5 @@ export interface ChatRoomInterface {
     messages: MessageInterface[],
     callout: MessageInterface
 }
-export interface ChatStateInterface { rooms: ChatRoomInterface[], chatEnabled: boolean, user: ChatUserInterface, mainConversationId: string }
+export interface ChatStateInterface { mainRoom: ChatRoomInterface, hostRoom: ChatRoomInterface, prayerRoom: ChatRoomInterface, chatEnabled: boolean, user: ChatUserInterface }
 export interface ChatUserInterface { displayName: string, isHost: boolean }

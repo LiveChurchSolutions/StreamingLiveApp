@@ -36,7 +36,6 @@ export const ServiceEdit: React.FC<Props> = (props) => {
 
     const handleSave = () => {
         setVideoUrl();
-        console.log(JSON.stringify(currentService));
         ApiHelper.post("/services", [currentService], "StreamingLiveApi").then(props.updatedFunction);
     }
 

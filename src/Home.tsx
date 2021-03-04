@@ -1,6 +1,7 @@
 import React from "react";
-import { ServicesHelper, ConversationInterface, TabInterface, ApiHelper, UserHelper, EnvironmentHelper, ConfigHelper, ConfigurationInterface, ServiceInterface, Header, VideoContainer, InteractionContainer, ChatStateInterface } from "./components";
+import { ServicesHelper, ConversationInterface, TabInterface, ApiHelper, UserHelper, EnvironmentHelper, ConfigHelper, ConfigurationInterface, ServiceInterface, Header, VideoContainer, InteractionContainer, ChatStateInterface, ConnectionInterface } from "./components";
 import { ChatHelper } from "./helpers/ChatHelper";
+import { SocketHelper } from "./helpers/SocketHelper";
 
 export const Home: React.FC = () => {
   const [cssUrl, setCssUrl] = React.useState(undefined);
@@ -17,9 +18,11 @@ export const Home: React.FC = () => {
 
     ConfigHelper.load(keyName).then(data => {
       var d: ConfigurationInterface = data;
-      ApiHelper.getAnon("/conversations/current/" + d.churchId + "/streamingLive/chat", "MessagingApi").then((conversation: ConversationInterface) => {
-        ChatHelper.setMainConversationId(conversation.id);
+
+      ChatHelper.initChat().then(() => {
+        joinRoom(data.churchId);
       });
+
 
       checkHost(d);
       setConfig(d);
@@ -27,6 +30,21 @@ export const Home: React.FC = () => {
     });
 
   }, []);
+
+
+  const joinRoom = async (churchId: string) => {
+    const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/current/" + churchId + "/streamingLive/chat", "MessagingApi");
+    ChatHelper.current.mainRoom = {
+      messages: [],
+      attendance: { conversationId: conversation.id, totalViewers: 0, viewers: [] },
+      callout: { content: "" },
+      conversationId: conversation.id
+    };
+    setChatState(ChatHelper.current);
+    const connection: ConnectionInterface = { conversationId: conversation.id, churchId: conversation.churchId, displayName: "Anonymous", socketId: SocketHelper.socketId }
+    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi");
+
+  }
 
   const checkHost = (d: ConfigurationInterface) => {
     if (UserHelper.isHost) {
@@ -68,12 +86,11 @@ export const Home: React.FC = () => {
   }
   setChatUser(ChatHelper.user);*/
   React.useEffect(() => {
-    ChatHelper.onChange = () => { setChatState(ChatHelper.current) }
+    ChatHelper.onChange = () => { setChatState({ ...ChatHelper.current }); }
     ServicesHelper.initTimer((cs) => { setCurrentService(cs) });
     loadConfig(true);
     setCurrentService(ServicesHelper.currentService);
   }, [loadConfig]);
-
 
   if (chatState === null) {
     return (<>Loading..</>);

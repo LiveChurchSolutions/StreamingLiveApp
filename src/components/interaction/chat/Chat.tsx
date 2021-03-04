@@ -25,6 +25,8 @@ export const Chat: React.FC<Props> = (props) => {
     React.useEffect(() => { setInterval(updateChatEnabled, 1000); }, [updateChatEnabled]);
 
     var className = (chatEnabled) ? "chatContainer" : "chatContainer chatDisabled";
+
+
     return (
         <div className={className} style={(props.visible) ? {} : { display: "none" }} >
             <Attendance attendance={props.room.attendance} />
