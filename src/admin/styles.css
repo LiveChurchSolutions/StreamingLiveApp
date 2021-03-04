@@ -27,7 +27,7 @@ h2 span { color: #24b9ff; }
 
 
 #userMenu {position:absolute;top:55px;z-index:9999;left:0px;right:0px;}
-#userMenu div {width:223px;max-width:100%;position:relative;background-color:#FFF;color:#333;float: right;box-shadow: 3px 3px 3px #999;}
+#userMenu>div {width:280px;max-width:100%;position:relative;background-color:#FFF;color:#333;float: right;box-shadow: 3px 3px 3px #999;}
 #userMenu a, #userMenu .label {display:block;padding-top:7px;padding-bottom:7px;padding-left:20px;color:#333;padding-right:10px;}
 #userMenu .label {font-weight:600;color:#333;}
 #userMenu a:hover {text-decoration:none;background-color:#03a9f4;color:#FFF;}

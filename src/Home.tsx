@@ -62,11 +62,10 @@ export const Home: React.FC = () => {
   }*/
 
   const handleNameUpdate = (displayName: string) => {
-    /*
-    var u = { ...chatUser };
-    u.displayName = displayName;
-    setChatUser(u);
-    ChatHelper.setName(displayName);*/
+    const data = { socketId: SocketHelper.socketId, name: displayName };
+    ApiHelper.postAnonymous("/connections/setName", data, "MessagingApi");
+    ChatHelper.current.user.displayName = displayName;
+    ChatHelper.onChange();
   }
 
   const handleLoginChange = () => {
