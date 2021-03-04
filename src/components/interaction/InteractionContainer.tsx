@@ -55,7 +55,6 @@ export const InteractionContainer: React.FC<Props> = (props) => {
     const getItems = () => {
         var result = [];
         if (props.tabs != null) {
-            console.log(props.tabs);
             for (let i = 0; i < props.tabs.length; i++) {
                 let t = props.tabs[i];
                 var visible = i === selectedTab;
@@ -65,7 +64,6 @@ export const InteractionContainer: React.FC<Props> = (props) => {
                     <i className={t.icon}></i>{t.text}
                 </a>);
 
-                console.log(i.toString() + t.text);
                 switch (t.type) {
                     case "chat":
                         if (props.chatState.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} />);

@@ -27,6 +27,11 @@ export class ChatHelper {
     }
 
     static handleCallout = (message: MessageInterface) => {
+        const room = ChatHelper.getRoom(message.conversationId);
+        if (room !== null) {
+            room.callout = message;
+            ChatHelper.onChange();
+        }
     }
 
     static handleDelete = (messageId: string) => {
