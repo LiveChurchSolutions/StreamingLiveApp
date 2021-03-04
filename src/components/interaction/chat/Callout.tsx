@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatHelper, ChatRoomInterface, ChatUserInterface } from "../../../helpers";
+import { ApiHelper, ChatHelper, ChatRoomInterface, ChatUserInterface, MessageInterface, ConfigHelper } from "../../../helpers";
 
 
 interface Props { room: ChatRoomInterface, user: ChatUserInterface }
@@ -14,6 +14,8 @@ export const Callout: React.FC<Props> = (props) => {
 
     const handleUpdate = (e: React.MouseEvent) => {
         e.preventDefault();
+        const msg: MessageInterface = { churchId: ConfigHelper.current.churchId, content: message, conversationId: props.room.conversationId, displayName: ChatHelper.current.user.displayName, messageType: "callout" }
+        ApiHelper.post("/messages/setCallout", [msg], "MessagingApi");
         //ChatHelper.setCallout(props.roomName, message);
         setEdit(false);
     }

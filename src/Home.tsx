@@ -70,27 +70,31 @@ export const Home: React.FC = () => {
   }
 
   const handleLoginChange = () => {
-    /*
-    setChatUser(ChatHelper.user);
-    loadConfig(false);*/
+    //setChatUser(ChatHelper.user);
+    //loadConfig(false);
   }
 
-  /*
-  ChatHelper.socketConnected = false;
 
-  const chatUser = ChatHelper.getUser();
-  if (ApiHelper.isAuthenticated) {
-    chatUser.displayName = UserHelper.user?.displayName || "Anonymous";
-    chatUser.isHost = true;
-    ChatHelper.user = chatUser;
+  const initUser = () => {
+    const chatUser = ChatHelper.getUser();
+    if (ApiHelper.isAuthenticated) {
+      chatUser.displayName = UserHelper.user?.displayName || "Anonymous";
+      chatUser.isHost = true;
+      ChatHelper.current.user = chatUser;
+    }
   }
-  setChatUser(ChatHelper.user);*/
+
+
+  //setChatUser(ChatHelper.user);*/
+
   React.useEffect(() => {
     ChatHelper.onChange = () => { setChatState({ ...ChatHelper.current }); }
     ServicesHelper.initTimer((cs) => { setCurrentService(cs) });
     loadConfig(true);
     setCurrentService(ServicesHelper.currentService);
+    initUser();
   }, [loadConfig]);
+
 
   if (chatState === null) {
     return (<>Loading..</>);

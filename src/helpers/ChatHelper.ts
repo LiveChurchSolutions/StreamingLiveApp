@@ -1,6 +1,6 @@
-import { ChatStateInterface, AttendanceInterface, MessageInterface, ChatRoomInterface } from "./Interfaces";
+import { ChatStateInterface, AttendanceInterface, MessageInterface, ChatRoomInterface, ChatUserInterface } from "./Interfaces";
 import { SocketHelper } from "./SocketHelper";
-
+import Cookies from 'js-cookie';
 
 export class ChatHelper {
 
@@ -55,6 +55,14 @@ export class ChatHelper {
     static insertLinks(text: string) {
         var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
         return text.replace(exp, "<a href='$1' target='_blank'>$1</a>");
+    }
+
+    static getUser() {
+        var name = Cookies.get('displayName');
+        if (name === undefined || name === null || name === '') { name = 'Anonymous'; Cookies.set('name', name); }
+        var result: ChatUserInterface = { displayName: name, isHost: false };
+        ChatHelper.current.user = result;
+        return result;
     }
 
 
