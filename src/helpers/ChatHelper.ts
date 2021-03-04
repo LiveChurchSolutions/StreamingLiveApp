@@ -35,6 +35,15 @@ export class ChatHelper {
     }
 
     static handleDelete = (messageId: string) => {
+        const rooms = [ChatHelper.current.mainRoom, ChatHelper.current.hostRoom, ChatHelper.current.prayerRoom];
+        rooms.forEach(room => {
+            if (room !== null) {
+                for (let i = room.messages.length - 1; i >= 0; i--) {
+                    if (room.messages[i].id === messageId) room.messages.splice(i, 1);
+                }
+            }
+        });
+        ChatHelper.onChange();
     }
 
     static handleMessage = (message: MessageInterface) => {
@@ -48,6 +57,14 @@ export class ChatHelper {
     static handlePrayerRequest = (conversationId: string) => {
     }
 
+    static handleCatchup = (messages: MessageInterface[]) => {
+        messages.forEach(m => {
+            switch (m.messageType) {
+                case "message": ChatHelper.handleMessage(m); break;
+                case "callout": ChatHelper.handleCallout(m); break;
+            }
+        });
+    }
 
     static getRoom = (conversationId: string): ChatRoomInterface => {
         const c = ChatHelper.current

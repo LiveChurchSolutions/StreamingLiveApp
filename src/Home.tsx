@@ -1,5 +1,5 @@
 import React from "react";
-import { ServicesHelper, ConversationInterface, TabInterface, ApiHelper, UserHelper, EnvironmentHelper, ConfigHelper, ConfigurationInterface, ServiceInterface, Header, VideoContainer, InteractionContainer, ChatStateInterface, ConnectionInterface } from "./components";
+import { ServicesHelper, ConversationInterface, TabInterface, ApiHelper, UserHelper, EnvironmentHelper, ConfigHelper, ConfigurationInterface, ServiceInterface, Header, VideoContainer, InteractionContainer, ChatStateInterface, ConnectionInterface, MessageInterface } from "./components";
 import { ChatHelper } from "./helpers/ChatHelper";
 import { SocketHelper } from "./helpers/SocketHelper";
 
@@ -43,7 +43,7 @@ export const Home: React.FC = () => {
     setChatState(ChatHelper.current);
     const connection: ConnectionInterface = { conversationId: conversation.id, churchId: conversation.churchId, displayName: "Anonymous", socketId: SocketHelper.socketId }
     ApiHelper.postAnonymous("/connections", [connection], "MessagingApi");
-
+    ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversation.id, "MessagingApi").then(messages => { ChatHelper.handleCatchup(messages) });
   }
 
   const checkHost = (d: ConfigurationInterface) => {

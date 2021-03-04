@@ -1,5 +1,5 @@
 import React from "react";
-import { MessageInterface, ChatHelper, ChatUserInterface } from "../../../helpers";
+import { MessageInterface, ChatHelper, ChatUserInterface, ApiHelper } from "../../../helpers";
 
 interface Props { message: MessageInterface, conversationId: string, user: ChatUserInterface }
 
@@ -7,6 +7,7 @@ export const ChatMessage: React.FC<Props> = (props) => {
 
     const handleDelete = (e: React.MouseEvent) => {
         e.preventDefault();
+        ApiHelper.delete("/messages/" + props.message.id, "MessagingApi");
         //ChatHelper.sendDelete(props.roomName, props.message.timestamp)
     }
 
