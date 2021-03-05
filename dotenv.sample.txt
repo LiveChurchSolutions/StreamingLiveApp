@@ -3,7 +3,8 @@ PORT=3201
 #Staging
 REACT_APP_ACCESS_API=https://accessapi.staging.churchapps.org
 REACT_APP_STREAMINGLIVE_API=https://api.staging.streaminglive.church
-REACT_APP_CHAT_API=wss://chat.staging.streaminglive.church
+REACT_APP_MESSAGING_API=https://messagingapi.staging.churchapps.org
+REACT_APP_MESSAGING_SOCKET=wss://socket.staging.churchapps.org
 REACT_APP_CONTENT_ROOT=
 REACT_APP_SUB_URL=http://{key}.localhost:3201
 REACT_APP_REQUIRE_PUBLISH=true
@@ -11,7 +12,8 @@ REACT_APP_REQUIRE_PUBLISH=true
 #Local
 #REACT_APP_ACCESS_API=http://localhost:8082
 #REACT_APP_STREAMINGLIVE_API=http://localhost:8200
-#REACT_APP_CHAT_API=wss://localhost:8201
+#REACT_APP_MESSAGING_API=http://localhost:8086
+#REACT_APP_MESSAGING_SOCKET=ws://localhost:8087
 #REACT_APP_CONTENT_ROOT=
 #REACT_APP_SUB_URL=http://{key}.localhost:3201
 #REACT_APP_REQUIRE_PUBLISH=false
