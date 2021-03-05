@@ -1,19 +1,13 @@
 import React from "react";
-import { ChatSend, Attendance, ChatReceive, ChatStateInterface, ConfigHelper, ChatHelper } from "../..";
-import { ChatRoomInterface } from "../../../helpers";
+import { ChatSend, Attendance, ChatReceive, ChatStateInterface } from "../..";
 
-interface Props { chatState: ChatStateInterface | undefined, visible: boolean }
-
+interface Props { chatState: ChatStateInterface, visible: boolean }
 export const HostChat: React.FC<Props> = (props) => {
-
-    const [hostRoom, setHostRoom] = React.useState<ChatRoomInterface>(null);
-
-
     return (
         <div className="chatContainer" style={(props.visible) ? {} : { display: "none" }} >
-            <Attendance attendance={hostRoom.attendance} />
-            <ChatReceive room={hostRoom} user={props.chatState.user} />
-            <ChatSend room={hostRoom} />
+            <Attendance attendance={props.chatState.hostRoom.attendance} />
+            <ChatReceive room={props.chatState.hostRoom} user={props.chatState.user} />
+            <ChatSend room={props.chatState.hostRoom} />
         </div>
     );
 }

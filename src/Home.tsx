@@ -20,7 +20,7 @@ export const Home: React.FC = () => {
       var d: ConfigurationInterface = data;
 
       ChatHelper.initChat().then(() => {
-        joinRoom(data.churchId);
+        joinMainRoom(data.churchId);
       });
 
 
@@ -32,7 +32,7 @@ export const Home: React.FC = () => {
   }, []);
 
 
-  const joinRoom = async (churchId: string) => {
+  const joinMainRoom = async (churchId: string) => {
     const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/current/" + churchId + "/streamingLive/chat", "MessagingApi");
     ChatHelper.current.mainRoom = {
       messages: [],
@@ -41,15 +41,30 @@ export const Home: React.FC = () => {
       conversationId: conversation.id
     };
     setChatState(ChatHelper.current);
-    const connection: ConnectionInterface = { conversationId: conversation.id, churchId: conversation.churchId, displayName: "Anonymous", socketId: SocketHelper.socketId }
-    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi");
-    ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversation.id, "MessagingApi").then(messages => { ChatHelper.handleCatchup(messages) });
+    joinRoom(conversation);
   }
 
-  const checkHost = (d: ConfigurationInterface) => {
+  const joinRoom = (conversation: ConversationInterface) => {
+    const connection: ConnectionInterface = { conversationId: conversation.id, churchId: conversation.churchId, displayName: ChatHelper.current.user.displayName, socketId: SocketHelper.socketId }
+    ApiHelper.postAnonymous("/connections", [connection], "MessagingApi");
+    ApiHelper.getAnonymous("/messages/catchup/" + conversation.churchId + "/" + conversation.id, "MessagingApi").then(messages => { ChatHelper.handleCatchup(messages) });
+  }
+
+  const checkHost = async (d: ConfigurationInterface) => {
     if (UserHelper.isHost) {
-      var tab: TabInterface = { type: "hostchat", text: "Host Chat", icon: "fas fa-users", data: "", url: "" }
-      d.tabs.push(tab);
+      d.tabs.push({ type: "hostchat", text: "Host Chat", icon: "fas fa-users", data: "", url: "" });
+      console.log("IS HOST");
+      const conversation: ConversationInterface = await ApiHelper.get("/conversations/current/" + d.churchId + "/streamingLiveHost/chat", "MessagingApi");
+      console.log("Got Conversation");
+      ChatHelper.current.hostRoom = {
+        messages: [],
+        attendance: { conversationId: conversation.id, totalViewers: 0, viewers: [] },
+        callout: { content: "" },
+        conversationId: conversation.id
+      };
+      console.log("SET HOST ROOM");
+      setChatState(ChatHelper.current);
+      joinRoom(conversation);
     }
   }
 
