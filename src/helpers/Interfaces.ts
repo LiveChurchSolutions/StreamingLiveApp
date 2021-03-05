@@ -23,7 +23,7 @@ export interface ChatEventsInterface {
     deleteHandler: (messageId: string) => void,
     calloutHandler: (message: MessageInterface) => void,
     attendanceHandler: (attendance: AttendanceInterface) => void,
-    prayerRequestHandler: (conversationId: string) => void,
+    prayerRequestHandler: (conversation: ConversationInterface) => void,
 }
 
 
@@ -31,7 +31,8 @@ export interface ChatRoomInterface {
     conversationId: string,
     attendance: AttendanceInterface,
     messages: MessageInterface[],
-    callout: MessageInterface
+    callout: MessageInterface,
+    prayerRequests?: ConversationInterface[]
 }
 export interface ChatStateInterface { mainRoom: ChatRoomInterface, hostRoom: ChatRoomInterface, prayerRoom: ChatRoomInterface, chatEnabled: boolean, user: ChatUserInterface }
 export interface ChatUserInterface { displayName: string, isHost: boolean }

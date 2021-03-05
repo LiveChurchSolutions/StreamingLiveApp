@@ -1,30 +1,37 @@
 import React from "react";
-//import { ChatSend, ChatReceive } from "./"
-import { ChatStateInterface, ConfigHelper, ChatHelper } from "../../../helpers";
+import { Chat } from "../"
+import { ChatStateInterface, ConfigHelper, ChatHelper, ConversationInterface } from "../../../helpers";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean }
 
 
 export const ReceivePrayer: React.FC<Props> = (props) => {
-    return <></>;
-    /*
-    const [prayerGuid, setPrayerGuid] = React.useState("");
-    const [prayerName, setPrayerName] = React.useState("");
+
+    const [conversation, setConversation] = React.useState<ConversationInterface>(null)
+
 
     const viewPrayer = (e: React.MouseEvent) => {
         e.preventDefault();
-        var guid = e.currentTarget.getAttribute("data-guid");
-        var name = e.currentTarget.getAttribute("data-name");
-        if (guid !== undefined && guid !== null) setPrayerGuid(guid);
-        if (name !== null) setPrayerName(name);
+        const idx = parseInt(e.currentTarget.getAttribute("data-idx"), 0);
+        const conv = props.chatState.hostRoom.prayerRequests[idx];
+        ChatHelper.current.prayerRoom = {
+            messages: [],
+            attendance: { conversationId: conv.id, totalViewers: 0, viewers: [] },
+            callout: { content: "" },
+            conversationId: conv.id
+        };
+        ChatHelper.onChange();
+        ChatHelper.joinRoom(conv);
+        setConversation(conv);
     }
 
     const getRequests = () => {
         var links = [];
-        if (props.chatState !== undefined) {
-            for (let i = 0; i < props.chatState.prayerRequests.length; i++) {
-                var pr = props.chatState.prayerRequests[i];
-                links.push(<div style={{ flex: "1 0 0" }}><a href="about:blank" data-guid={pr.userGuid} data-name={pr.name} onClick={viewPrayer}>{pr.name}</a></div>)
+        const requests = props.chatState?.hostRoom?.prayerRequests;
+        if (requests !== undefined) {
+            for (let i = 0; i < requests.length; i++) {
+                var pr = requests[i];
+                links.push(<div style={{ flex: "1 0 0" }}><a href="about:blank" data-idx={i} onClick={viewPrayer}>{pr.title}</a></div>)
             }
         }
         if (links.length > 0) return (<div style={{ padding: 10 }}>{links}</div>);
@@ -32,12 +39,9 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
     }
 
     const getChat = () => {
-        if (prayerGuid !== "") return (<>
-            <div style={{ flex: "0 0 0 25px", backgroundColor: "#eee", paddingLeft: 10 }}>Chatting with {prayerName}</div>
-            <div className="chatContainer" style={(props.visible) ? {} : { display: "none" }}>
-                <ChatReceive room={ChatHelper.getOrCreateRoom(props.chatState, "church_" + ConfigHelper.current.churchId + "_" + prayerGuid)} />
-                <ChatSend room={"church_" + ConfigHelper.current.churchId + "_" + prayerGuid} />
-            </div>
+        if (conversation !== null) return (<>
+            <div style={{ flex: "0 0 0 25px", backgroundColor: "#eee", paddingLeft: 10 }}>{conversation.title}</div>
+            <Chat room={props.chatState.prayerRoom} user={props.chatState.user} visible={props.visible} />
         </>);
         else return null;
     }
@@ -48,7 +52,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         {getRequests()}
         {getChat()}
     </div>
-*/
+
 }
 
 

@@ -1,6 +1,7 @@
-import { ChatStateInterface, AttendanceInterface, MessageInterface, ChatRoomInterface, ChatUserInterface } from "./Interfaces";
+import { ChatStateInterface, AttendanceInterface, MessageInterface, ChatRoomInterface, ChatUserInterface, ConversationInterface, ConnectionInterface } from "./Interfaces";
 import { SocketHelper } from "./SocketHelper";
 import Cookies from 'js-cookie';
+import { ApiHelper } from "."
 
 export class ChatHelper {
 
@@ -54,8 +55,13 @@ export class ChatHelper {
         }
     }
 
-    static handlePrayerRequest = (conversationId: string) => {
+    static handlePrayerRequest = (conversation: ConversationInterface) => {
+        const room = ChatHelper.current.hostRoom;
+        if (room.prayerRequests === undefined) room.prayerRequests = [];
+        room.prayerRequests.push(conversation);
+        ChatHelper.onChange();
     }
+
 
     static handleCatchup = (messages: MessageInterface[]) => {
         messages.forEach(m => {
@@ -86,6 +92,13 @@ export class ChatHelper {
         var result: ChatUserInterface = { displayName: name, isHost: false };
         ChatHelper.current.user = result;
         return result;
+    }
+
+
+    static joinRoom(conversation: ConversationInterface) {
+        const connection: ConnectionInterface = { conversationId: conversation.id, churchId: conversation.churchId, displayName: ChatHelper.current.user.displayName, socketId: SocketHelper.socketId }
+        ApiHelper.postAnonymous("/connections", [connection], "MessagingApi");
+        ApiHelper.getAnonymous("/messages/catchup/" + conversation.churchId + "/" + conversation.id, "MessagingApi").then(messages => { ChatHelper.handleCatchup(messages) });
     }
 
 
