@@ -6,6 +6,8 @@ interface Props {
     room: ChatRoomInterface,
     user: ChatUserInterface,
     visible: boolean,
+    enableCallout?: boolean,
+    enableAttendance?: boolean,
 }
 
 export const Chat: React.FC<Props> = (props) => {
@@ -29,8 +31,8 @@ export const Chat: React.FC<Props> = (props) => {
 
     return (
         <div className={className} style={(props.visible) ? {} : { display: "none" }} >
-            <Attendance attendance={props.room.attendance} />
-            <Callout room={props.room} user={props.user} />
+            {(props.enableAttendance) ? <Attendance attendance={props.room.attendance} /> : null}
+            {(props.enableCallout) ? <Callout room={props.room} user={props.user} /> : null}
             <ChatReceive room={props.room} user={props.user} />
             <ChatSend room={props.room} />
         </div>

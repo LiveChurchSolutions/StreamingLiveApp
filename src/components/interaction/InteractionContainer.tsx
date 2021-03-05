@@ -66,7 +66,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
                 switch (t.type) {
                     case "chat":
-                        if (props.chatState.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} />);
+                        if (props.chatState.mainRoom !== null) result.push(<Chat key={i} room={props.chatState.mainRoom} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={true} />);
                         break;
                     case "hostchat":
                         if (props.chatState.hostRoom !== null) result.push(<HostChat key={i} chatState={props.chatState} visible={visible} />);

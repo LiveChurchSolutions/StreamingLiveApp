@@ -41,7 +41,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
     const getChat = () => {
         if (conversation !== null) return (<>
             <div style={{ flex: "0 0 0 25px", backgroundColor: "#eee", paddingLeft: 10 }}>{conversation.title}</div>
-            <Chat room={props.chatState.prayerRoom} user={props.chatState.user} visible={props.visible} />
+            <Chat room={props.chatState.prayerRoom} user={props.chatState.user} visible={props.visible} enableAttendance={true} />
         </>);
         else return null;
     }
