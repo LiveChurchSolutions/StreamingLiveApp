@@ -21,7 +21,10 @@ export class SocketHelper {
                 const payload = JSON.parse(event.data);
                 SocketHelper.handleMessage(payload);
             };
-            SocketHelper.socket.onopen = (e) => { resolve(null); };
+            SocketHelper.socket.onopen = (e) => {
+                SocketHelper.socket.send("getId");
+                resolve(null);
+            };
         });
     }
 
