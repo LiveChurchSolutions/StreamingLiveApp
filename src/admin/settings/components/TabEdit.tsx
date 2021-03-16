@@ -21,10 +21,7 @@ export const TabEdit: React.FC<Props> = (props) => {
         var t = { ...currentTab };
         switch (e.currentTarget.name) {
             case "text": t.text = val; break;
-            case "type":
-                t.linkType = val;
-                if (val === "page" && pages?.length > 0) t.linkData = pages[0].id.toString();
-                break;
+            case "type": t.linkType = val; break;
             case "page": t.linkData = val; break;
             case "url": t.url = val; break;
         }
@@ -67,6 +64,7 @@ export const TabEdit: React.FC<Props> = (props) => {
             else {
                 options = [];
                 pages.forEach(page => options.push(<option value={page.id} key={page.id}>{page.name}</option>));
+                if (currentTab.linkData === "") currentTab.linkData = pages[0].id;
             }
             return (
                 <div className="form-group">
