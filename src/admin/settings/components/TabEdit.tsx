@@ -1,5 +1,5 @@
 import React from "react";
-import { InputBox, LinkInterface, ApiHelper, PageInterface, UserHelper, UniqueIdHelper } from "."
+import { InputBox, LinkInterface, ApiHelper, PageInterface, UniqueIdHelper } from "."
 
 interface Props { currentTab: LinkInterface, updatedFunction?: () => void }
 
@@ -29,7 +29,7 @@ export const TabEdit: React.FC<Props> = (props) => {
     }
 
     const handleSave = () => {
-        if (currentTab.linkType === "page") currentTab.url = "/data/" + UserHelper.currentChurch.subDomain + "/page" + currentTab.linkData + ".html";
+        if (currentTab.linkType === "page") currentTab.url = currentTab.linkData;
         else if (currentTab.linkType !== "url") currentTab.url = "";
         ApiHelper.post("/links", [currentTab], "StreamingLiveApi").then(props.updatedFunction);
     }
@@ -63,8 +63,8 @@ export const TabEdit: React.FC<Props> = (props) => {
             if (pages === null) loadPages();
             else {
                 options = [];
-                pages.forEach(page => options.push(<option value={page.id} key={page.id}>{page.name}</option>));
-                if (currentTab.linkData === "") currentTab.linkData = pages[0].id;
+                pages.forEach(page => options.push(<option value={page.path} key={page.id}>{page.name}</option>));
+                if (currentTab.linkData === "") currentTab.linkData = pages[0].path;
             }
             return (
                 <div className="form-group">

@@ -1,5 +1,5 @@
 import React from "react";
-import { TabInterface, Chat, HostChat, RequestPrayer, ReceivePrayer, PageLoader } from "..";
+import { TabInterface, Chat, HostChat, RequestPrayer, ReceivePrayer, FileLoader } from "..";
 import { ChatStateInterface } from "../../helpers";
 
 
@@ -43,19 +43,12 @@ export const InteractionContainer: React.FC<Props> = (props) => {
     }
 
     const getIframe = (tab: TabInterface, i: number, visible: boolean) => {
-        const envPublish = process.env.REACT_APP_REQUIRE_PUBLISH;
-        if (envPublish === 'true') {
-            return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}><iframe src={tab.url} frameBorder="0" title={"frame" + i.toString()}></iframe></div>)
-        }
-        if (envPublish === 'false') {
+        return (
+            <div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}>
+                <FileLoader url={tab.url} title={"frame" + i.toString()} fileType="text/html" keyName="StreamingLiveApi" />
+            </div>);
 
-            const path = tab.url.split('/');
-            const pageId = path[path.length - 1].substring(4).split('.')[0];
 
-            if (tab.url[0] !== '/') return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}><iframe src={tab.url} frameBorder="0" title={"frame" + i.toString()}></iframe></div>)
-            else return (<div key={i} id={"frame" + i.toString()} className="frame" style={(!visible) ? { display: "none" } : {}}><PageLoader pageId={pageId} title={"frame" + i.toString()} /></div>);
-
-        }
     }
 
     /*

@@ -1,4 +1,4 @@
-export { ErrorMessages, InputBox, PageLoader } from "../appBase/components";
+export { ErrorMessages, InputBox, FileLoader } from "../appBase/components";
 
 export * from '../helpers'
 export * from '../admin/components'
