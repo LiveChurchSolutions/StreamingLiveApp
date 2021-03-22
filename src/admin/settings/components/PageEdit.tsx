@@ -6,6 +6,7 @@ import { EditorState, ContentState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { PageInterface, ApiHelper, InputBox, UniqueIdHelper } from "./"
+import { EnvironmentHelper } from "../../components";
 
 
 interface Props { page: PageInterface, updatedFunction: () => void }
@@ -39,9 +40,7 @@ export const PageEdit: React.FC<Props> = (props) => {
         var content = editorState.getCurrentContent();
         page.content = draftToHtml(convertToRaw(content));
 
-        ApiHelper.post("/pages", [page], "StreamingLiveApi").then(pages => {
-            ApiHelper.post("/pages/write", pages[0], "StreamingLiveApi").then(props.updatedFunction);
-        });
+        ApiHelper.post("/pages", [page], "StreamingLiveApi").then(props.updatedFunction);
     }
 
     const handleEditorChange = (e: EditorState) => {
@@ -50,12 +49,20 @@ export const PageEdit: React.FC<Props> = (props) => {
 
     const init = () => {
         setPage(props.page);
-        const content = props.page?.content;
-        if (content !== undefined && content !== null) {
-            const draft = htmlToDraft(props.page?.content)
-            setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(draft.contentBlocks)));
+
+        if (UniqueIdHelper.isMissing(props.page.id)) setEditorState(EditorState.createWithContent(ContentState.createFromText("")));
+        else {
+            const path = `${EnvironmentHelper.ContentRoot}/${props.page.churchId}/pages/${props.page.id}.html`;
+            console.log(path);
+            fetch(path)
+                .then(response => response.text())
+                .then(content => {
+                    console.log(content);
+                    const draft = htmlToDraft(content)
+                    setEditorState(EditorState.createWithContent(ContentState.createFromBlockArray(draft.contentBlocks)));
+                })
         }
-        else setEditorState(EditorState.createWithContent(ContentState.createFromText("")));
+
     }
 
     React.useEffect(() => {
