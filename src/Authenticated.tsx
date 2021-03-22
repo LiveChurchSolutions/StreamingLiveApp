@@ -4,6 +4,7 @@ import { ProfilePage } from "./components";
 import { Home } from "./Home"
 import { Logout } from "./Logout";
 import { SettingsPage } from './admin/settings/SettingsPage'
+import { Page } from "./Page"
 
 interface Props { location: any }
 
@@ -15,6 +16,7 @@ export const Authenticated: React.FC<Props> = (props) => {
             <Route path="/login"><Redirect to="/" /></Route>
             <Route path="/forgot"  ><Redirect to="/" /></Route>
             <Route path="/logout"><Logout /></Route>
+            <Route path="/pages/:churchId/:id" component={Page} ></Route>
             <Route path="/"><Home /></Route>
 
         </Switch>
