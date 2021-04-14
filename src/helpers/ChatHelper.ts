@@ -107,14 +107,11 @@ export class ChatHelper {
 
     static getRoom = (conversationId: string): ChatRoomInterface => {
         const c = ChatHelper.current;
-        if (c.mainRoom?.conversationId === conversationId) return c.mainRoom;
-        else if (c.hostRoom?.conversationId === conversationId) return c.hostRoom;
-        else {
-            c.privateRooms.forEach(r => {
-                if (r.conversationId === conversationId) return r;
-            });
-        }
-        return null;
+        var result: ChatRoomInterface = null;
+        if (c.mainRoom?.conversationId === conversationId) result = c.mainRoom;
+        else if (c.hostRoom?.conversationId === conversationId) result = c.hostRoom;
+        else c.privateRooms.forEach(r => { if (r.conversationId === conversationId) result = r; });
+        return result;
     }
 
 
