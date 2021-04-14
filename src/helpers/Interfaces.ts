@@ -6,7 +6,7 @@ export interface AdminServiceInterface { id?: string, churchId?: string, service
 
 
 export interface ConnectionInterface { churchId: string, conversationId: string, displayName: string, socketId: string }
-export interface ViewerInterface { name: string, count: number }
+export interface ViewerInterface { displayName: string, id: string }
 export interface AttendanceInterface { viewers?: ViewerInterface[], totalViewers?: number, conversationId: string }
 export interface ConversationInterface { id?: string, churchId?: string, contentType: string, contentId: string, title: string, dateCreated: Date }
 export interface MessageInterface { id?: string, churchId?: string, conversationId?: string, userId?: string, displayName?: string, timeSent?: Date, messageType?: string, content?: string }

@@ -15,7 +15,7 @@ export const Attendance: React.FC<Props> = (props) => {
 
     const getViewerCount = () => {
         var totalViewers = 0;
-        if (props.attendance.viewers !== undefined) props.attendance.viewers.forEach((v) => { totalViewers += v.count });
+        if (props.attendance.viewers !== undefined) totalViewers = props.attendance.viewers.length;
         if (totalViewers === 1) return "1 attendee";
         else return totalViewers.toString() + " attendees";
     }
@@ -28,13 +28,40 @@ export const Attendance: React.FC<Props> = (props) => {
     const getPeople = () => {
         var result = null;
         if (showList && props.attendance.viewers !== undefined) {
+            /*
             var people = [];
             for (let i = 0; i < props.attendance.viewers.length; i++) {
                 var v = props.attendance.viewers[i];
-                var countSpan = (v.count > 1) ? <span>({v.count})</span> : null;
-                people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.name} {countSpan}</div>);
-            }
+                //var countSpan = (v.count > 1) ? <span>({v.count})</span> : null;
+                var countSpan = null;
+                people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.displayName} {countSpan}</div>);
+            }*/
+            const people = getPeopleCondensed();
             result = <div id="attendance">{people}</div>
+        }
+        return result;
+    }
+
+    const getPeopleCondensed = () => {
+        var people = [];
+        const combinedPeople = getCombinedPeople();
+
+        for (let i = 0; i < combinedPeople.length; i++) {
+            var v = combinedPeople[i];
+            var countSpan = (v.count > 1) ? <span>({v.count})</span> : null;
+            people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.displayName} {countSpan}</div>);
+        }
+        return people;
+    }
+
+    const getCombinedPeople = () => {
+        var lastName = null;
+        const result: any[] = [];
+        for (let i = 0; i < props.attendance.viewers.length; i++) {
+            const v = props.attendance.viewers[i];
+            if (v.displayName === lastName) result[result.length - 1].count++;
+            else result.push({ displayName: v.displayName, count: 1 });
+            lastName = v.displayName;
         }
         return result;
     }
