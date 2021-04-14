@@ -271,6 +271,9 @@ body {
 #attendanceCount:hover {
   text-decoration: none;
 }
+.attendanceExpanded {padding-left: 20px;}
+.attendanceExpanded span.id {font-size: 11px;float:none !important;}
+
 #chatSend,
 prayerSend {
   flex: 0 0 0px;

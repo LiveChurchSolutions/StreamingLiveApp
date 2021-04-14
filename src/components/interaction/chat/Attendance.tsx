@@ -1,5 +1,5 @@
 import React from "react";
-import { AttendanceInterface } from "../../../helpers";
+import { AttendanceInterface, UserHelper } from "../../../helpers";
 
 interface Props {
     attendance: AttendanceInterface;
@@ -7,6 +7,7 @@ interface Props {
 
 export const Attendance: React.FC<Props> = (props) => {
     const [showList, setShowList] = React.useState(false);
+    const [showName, setShowName] = React.useState("");
 
     const toggleAttendance = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -23,6 +24,11 @@ export const Attendance: React.FC<Props> = (props) => {
     const getChevron = () => {
         if (showList) return <i className="fas fa-chevron-up"></i>
         else return <i className="fas fa-chevron-down"></i>
+    }
+
+    const getNameChevron = (name: string) => {
+        if (name === showName) return <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowName(""); }}><i className="fas fa-chevron-up"></i></a>;
+        else return <a href="about:blank" onClick={(e) => { e.preventDefault(); setShowName(name); }}><i className="fas fa-chevron-down"></i></a>;
     }
 
     const getPeople = () => {
@@ -42,14 +48,32 @@ export const Attendance: React.FC<Props> = (props) => {
         return result;
     }
 
+    const getIndividuals = (name: string) => {
+        var people = [];
+        for (let i = 0; i < props.attendance.viewers.length; i++) {
+            var v = props.attendance.viewers[i];
+            if (v.displayName === name) people.push(<div key={i} className="attendanceExpanded"><i className="fas fa-user-alt"></i>{v.displayName} <span className="id">{v.id}</span></div>);
+        }
+        return people;
+    }
+
     const getPeopleCondensed = () => {
         var people = [];
         const combinedPeople = getCombinedPeople();
 
         for (let i = 0; i < combinedPeople.length; i++) {
+            var children: any[] = [];
             var v = combinedPeople[i];
-            var countSpan = (v.count > 1) ? <span>({v.count})</span> : null;
+            var countSpan = null;
+            if (v.count > 1) {
+                if (!UserHelper.isHost) countSpan = <span>({v.count})</span>;
+                else {
+                    countSpan = <span>({v.count}) {getNameChevron(v.displayName)} </span>;
+                    if (v.displayName === showName) children = getIndividuals(v.displayName);
+                }
+            }
             people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.displayName} {countSpan}</div>);
+            if (children !== []) people.push(children);
         }
         return people;
     }
