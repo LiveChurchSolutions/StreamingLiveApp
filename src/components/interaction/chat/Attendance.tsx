@@ -16,8 +16,8 @@ export const Attendance: React.FC<Props> = (props) => {
     const getViewerCount = () => {
         var totalViewers = 0;
         if (props.attendance.viewers !== undefined) props.attendance.viewers.forEach((v) => { totalViewers += v.count });
-        if (totalViewers === 1) return "1 viewer online";
-        else return totalViewers.toString() + " viewers online";
+        if (totalViewers === 1) return "1 attendee";
+        else return totalViewers.toString() + " attendees";
     }
 
     const getChevron = () => {

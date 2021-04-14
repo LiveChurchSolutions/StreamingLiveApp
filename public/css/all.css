@@ -190,6 +190,12 @@ body {
   padding-right: 10px;
   padding-left: 10px;
 }
+
+.tab.childTab {
+  color: var(--primaryContrast);
+  background-color: var(--primaryColor);
+}
+
 /*#tabs > *:not(:first-child) {border-left:1px solid var(--primaryColor);}*/
 .frame {
   flex: 1;
