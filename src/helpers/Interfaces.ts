@@ -30,7 +30,9 @@ export interface ChatRoomInterface {
     attendance: AttendanceInterface,
     messages: MessageInterface[],
     callout: MessageInterface,
-    prayerRequests?: ConversationInterface[]
+    prayerRequests?: ConversationInterface[],
 }
-export interface ChatStateInterface { mainRoom: ChatRoomInterface, hostRoom: ChatRoomInterface, prayerRoom: ChatRoomInterface, chatEnabled: boolean, user: ChatUserInterface }
+
+
+export interface ChatStateInterface { mainRoom: ChatRoomInterface, hostRoom: ChatRoomInterface, privateRooms: ChatRoomInterface[], chatEnabled: boolean, user: ChatUserInterface }
 export interface ChatUserInterface { displayName: string, isHost: boolean }

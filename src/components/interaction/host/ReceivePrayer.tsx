@@ -1,6 +1,6 @@
 import React from "react";
 import { Chat } from "../"
-import { ChatStateInterface, ChatHelper, ConversationInterface } from "../../../helpers";
+import { ChatStateInterface, ChatHelper, ConversationInterface, ChatRoomInterface } from "../../../helpers";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean }
 
@@ -9,17 +9,17 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
 
     const [conversation, setConversation] = React.useState<ConversationInterface>(null)
 
-
     const viewPrayer = (e: React.MouseEvent) => {
         e.preventDefault();
         const idx = parseInt(e.currentTarget.getAttribute("data-idx"), 0);
         const conv = props.chatState.hostRoom.prayerRequests[idx];
-        ChatHelper.current.prayerRoom = {
+        const prayerRoom: ChatRoomInterface = {
             messages: [],
             attendance: { conversationId: conv.id, totalViewers: 0, viewers: [] },
             callout: { content: "" },
             conversationId: conv.id
         };
+        ChatHelper.current.privateRooms = [prayerRoom];
         ChatHelper.onChange();
         ChatHelper.joinRoom(conv.id, conv.churchId);
         setConversation(conv);
@@ -41,7 +41,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
     const getChat = () => {
         if (conversation !== null) return (<>
             <div style={{ flex: "0 0 0 25px", backgroundColor: "#eee", paddingLeft: 10 }}>{conversation.title}</div>
-            <Chat room={props.chatState.prayerRoom} user={props.chatState.user} visible={props.visible} enableAttendance={true} />
+            <Chat room={props.chatState.privateRooms[0]} user={props.chatState.user} visible={props.visible} enableAttendance={true} />
         </>);
         else return null;
     }

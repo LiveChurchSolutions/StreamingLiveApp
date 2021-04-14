@@ -6,7 +6,7 @@ import { ApiHelper } from "."
 
 export class ChatHelper {
 
-    static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, prayerRoom: null, user: { displayName: "Anonymous", isHost: false } };
+    static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { displayName: "Anonymous", isHost: false } };
     static onChange: () => void;
 
     static createRoom = (conversationId: string): ChatRoomInterface => {
@@ -60,7 +60,8 @@ export class ChatHelper {
     }
 
     static handleDelete = (messageId: string) => {
-        const rooms = [ChatHelper.current.mainRoom, ChatHelper.current.hostRoom, ChatHelper.current.prayerRoom];
+        const rooms = [ChatHelper.current.mainRoom, ChatHelper.current.hostRoom];
+        ChatHelper.current.privateRooms.forEach(r => rooms.push(r));
         rooms.forEach(room => {
             if (room !== null) {
                 for (let i = room.messages.length - 1; i >= 0; i--) {
@@ -77,7 +78,7 @@ export class ChatHelper {
             room.messages.push(message);
             if (room === ChatHelper.current.mainRoom) ConfigHelper.setTabUpdated("chat");
             if (room === ChatHelper.current.hostRoom) ConfigHelper.setTabUpdated("hostchat");
-            if (room === ChatHelper.current.prayerRoom) ConfigHelper.setTabUpdated("prayer");
+            else ConfigHelper.setTabUpdated("prayer");
             ChatHelper.onChange();
         }
     }
@@ -108,8 +109,12 @@ export class ChatHelper {
         const c = ChatHelper.current;
         if (c.mainRoom?.conversationId === conversationId) return c.mainRoom;
         else if (c.hostRoom?.conversationId === conversationId) return c.hostRoom;
-        else if (c.prayerRoom?.conversationId === conversationId) return c.prayerRoom;
-        else return null;
+        else {
+            c.privateRooms.forEach(r => {
+                if (r.conversationId === conversationId) return r;
+            });
+        }
+        return null;
     }
 
 
