@@ -1,5 +1,6 @@
 import React from "react";
 import { AttendanceInterface, UserHelper } from "../../../helpers";
+import { AttendeeMenu } from "./AttendeeMenu";
 
 interface Props {
     attendance: AttendanceInterface;
@@ -8,6 +9,9 @@ interface Props {
 export const Attendance: React.FC<Props> = (props) => {
     const [showList, setShowList] = React.useState(false);
     const [showName, setShowName] = React.useState("");
+    const [contextEvent, setContextEvent] = React.useState<React.MouseEvent>(null);
+    const [contextX, setContextX] = React.useState(0);
+    const [contextY, setContextY] = React.useState(0);
 
     const toggleAttendance = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -52,7 +56,7 @@ export const Attendance: React.FC<Props> = (props) => {
         var people = [];
         for (let i = 0; i < props.attendance.viewers.length; i++) {
             var v = props.attendance.viewers[i];
-            if (v.displayName === name) people.push(<div key={i} className="attendanceExpanded"><i className="fas fa-user-alt"></i>{v.displayName} <span className="id">{v.id}</span></div>);
+            if (v.displayName === name) people.push(<div key={i} onContextMenu={handleAttendeeContext} className="attendanceExpanded"><i className="fas fa-user-alt"></i>{v.displayName} <span className="id">{v.id}</span></div>);
         }
         return people;
     }
@@ -90,10 +94,18 @@ export const Attendance: React.FC<Props> = (props) => {
         return result;
     }
 
+    function handleAttendeeContext(e: React.MouseEvent) {
+        e.preventDefault();
+        setContextX(e.pageX);
+        setContextY(e.pageY);
+        setContextEvent(e);
+    }
+
     return (
         <>
             {getPeople()}
             <a id="attendanceCount" href="about:blank" onClick={toggleAttendance}>{getViewerCount()} {getChevron()}</a>
+            <AttendeeMenu event={contextEvent} x={contextX} y={contextY} />
         </>
     );
 }
