@@ -1,6 +1,7 @@
 import React from "react";
-import { AttendanceInterface, UserHelper } from "../../../helpers";
-import { AttendeeMenu } from "./AttendeeMenu";
+import { AttendanceInterface, UserHelper, ConfigHelper, ChatHelper, ConversationInterface, ChatRoomInterface, ApiHelper } from "../../../helpers";
+import { Menu, Item, useContextMenu } from 'react-contexify';
+import 'react-contexify/dist/ReactContexify.css';
 
 interface Props {
     attendance: AttendanceInterface;
@@ -9,9 +10,8 @@ interface Props {
 export const Attendance: React.FC<Props> = (props) => {
     const [showList, setShowList] = React.useState(false);
     const [showName, setShowName] = React.useState("");
-    const [contextEvent, setContextEvent] = React.useState<React.MouseEvent>(null);
-    const [contextX, setContextX] = React.useState(0);
-    const [contextY, setContextY] = React.useState(0);
+    const [selectedConnectionId, setSelectedConnectionId] = React.useState("");
+
 
     const toggleAttendance = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -38,14 +38,6 @@ export const Attendance: React.FC<Props> = (props) => {
     const getPeople = () => {
         var result = null;
         if (showList && props.attendance.viewers !== undefined) {
-            /*
-            var people = [];
-            for (let i = 0; i < props.attendance.viewers.length; i++) {
-                var v = props.attendance.viewers[i];
-                //var countSpan = (v.count > 1) ? <span>({v.count})</span> : null;
-                var countSpan = null;
-                people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.displayName} {countSpan}</div>);
-            }*/
             const people = getPeopleCondensed();
             result = <div id="attendance">{people}</div>
         }
@@ -56,7 +48,7 @@ export const Attendance: React.FC<Props> = (props) => {
         var people = [];
         for (let i = 0; i < props.attendance.viewers.length; i++) {
             var v = props.attendance.viewers[i];
-            if (v.displayName === name) people.push(<div key={i} onContextMenu={handleAttendeeContext} className="attendanceExpanded"><i className="fas fa-user-alt"></i>{v.displayName} <span className="id">{v.id}</span></div>);
+            if (v.displayName === name) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, v.id)} className="attendanceExpanded"><i className="fas fa-user-alt"></i>{v.displayName} <span className="id">{v.id}</span></div>);
         }
         return people;
     }
@@ -76,7 +68,15 @@ export const Attendance: React.FC<Props> = (props) => {
                     if (v.displayName === showName) children = getIndividuals(v.displayName);
                 }
             }
-            people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.displayName} {countSpan}</div>);
+
+            if (!UserHelper.isHost || v.count > 1) people.push(<div key={i}><i className="fas fa-user-alt"></i>{v.displayName} {countSpan}</div>);
+            else {
+                for (let i = 0; i < props.attendance.viewers.length; i++) {
+                    var c = props.attendance.viewers[i];
+                    if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)}><i className="fas fa-user-alt"></i>{v.displayName}</div>);
+                }
+            }
+
             if (children !== []) people.push(children);
         }
         return people;
@@ -94,18 +94,41 @@ export const Attendance: React.FC<Props> = (props) => {
         return result;
     }
 
-    function handleAttendeeContext(e: React.MouseEvent) {
+
+    const contextMenu = useContextMenu({ id: "attendeeMenu" });
+    const handlePMClick = async (e: any) => {
+        const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + ConfigHelper.current.churchId + "/" + selectedConnectionId, "MessagingApi");
+        const privateRoom: ChatRoomInterface = {
+            messages: [],
+            attendance: { conversationId: conversation.id, totalViewers: 0, viewers: [] },
+            callout: { content: "" },
+            conversationId: conversation.id
+        };
+        ChatHelper.current.privateRooms.push(privateRoom);
+        ChatHelper.onChange();
+        ChatHelper.joinRoom(conversation.id, conversation.churchId);
+    }
+
+    function handleAttendeeContext(e: React.MouseEvent, connectionId: string) {
         e.preventDefault();
-        setContextX(e.pageX);
-        setContextY(e.pageY);
-        setContextEvent(e);
+        setSelectedConnectionId(connectionId);
+        contextMenu.hideAll();
+        contextMenu.show(e, {
+            position: {
+                x: e.pageX - 200,
+                y: e.pageY
+            }
+        });
+
     }
 
     return (
         <>
             {getPeople()}
             <a id="attendanceCount" href="about:blank" onClick={toggleAttendance}>{getViewerCount()} {getChevron()}</a>
-            <AttendeeMenu event={contextEvent} x={contextX} y={contextY} />
+            <Menu id={"attendeeMenu"}>
+                <Item onClick={handlePMClick}>Private Message</Item>
+            </Menu>
         </>
     );
 }
