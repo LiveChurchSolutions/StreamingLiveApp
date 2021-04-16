@@ -26,6 +26,7 @@ export class ChatHelper {
             messageHandler: ChatHelper.handleMessage,
             prayerRequestHandler: ChatHelper.handlePrayerRequest,
             disconnectHandler: ChatHelper.handleDisconnect,
+            privateMessageHandler: ChatHelper.handlePrivateMessage,
         });
     }
 
@@ -89,6 +90,15 @@ export class ChatHelper {
         room.prayerRequests.push(conversation);
         ConfigHelper.setTabUpdated("prayer");
         ChatHelper.onChange();
+    }
+
+
+    static handlePrivateMessage = (conversation: ConversationInterface) => {
+        const privateRoom = ChatHelper.createRoom(conversation.id);
+        ChatHelper.current.privateRooms.push(privateRoom);
+        ChatHelper.onChange();
+        ChatHelper.joinRoom(conversation.id, conversation.churchId);
+        ConfigHelper.setTabUpdated("prayer");
     }
 
 

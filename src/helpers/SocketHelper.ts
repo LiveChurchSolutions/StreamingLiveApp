@@ -41,6 +41,7 @@ export class SocketHelper {
             case "deleteMessage": SocketHelper.events.deleteHandler(payload.data); break;
             case "message": SocketHelper.events.messageHandler(payload.data); break;
             case "prayerRequest": SocketHelper.events.prayerRequestHandler(payload.data); break;
+            case "privateMessage": SocketHelper.events.privateMessageHandler(payload.data); break;
             case "socketId":
                 SocketHelper.socketId = payload.data;
                 break;

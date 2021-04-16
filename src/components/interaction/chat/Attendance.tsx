@@ -106,11 +106,6 @@ export const Attendance: React.FC<Props> = (props) => {
     }
 
     function handleAttendeeContext(e: React.MouseEvent, connectionId: string) {
-
-        console.log("SELECTED VIEWER");
-        console.log(connectionId);
-
-
         e.preventDefault();
         setSelectedConnectionId(connectionId);
         contextMenu.hideAll();
