@@ -1,6 +1,6 @@
 import React from "react";
 import { Chat } from "../"
-import { ChatStateInterface, ChatHelper, ConversationInterface, ChatRoomInterface } from "../../../helpers";
+import { ChatStateInterface, ChatHelper } from "../../../helpers";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean, switchToConversationId: string }
 
@@ -72,7 +72,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
                 setTimeout(() => selectConversation(convId), 300);
             }
         }
-    }, [props.switchToConversationId]);
+    }, [props.switchToConversationId, selectedConversation]);
 
 
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { TabInterface, Chat, HostChat, RequestPrayer, ReceivePrayer } from "..";
-import { ChatHelper, ChatStateInterface, ConfigHelper, ConfigurationInterface } from "../../helpers";
+import { ChatStateInterface, ConfigHelper, ConfigurationInterface } from "../../helpers";
 
 
 interface Props {
@@ -109,7 +109,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
             }
 
         }
-    }, [props.config.switchToConversationId]);
+    }, [props.config.switchToConversationId, props.config.tabs, selectedTab]);
 
 
     return (
