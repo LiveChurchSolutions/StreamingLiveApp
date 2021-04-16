@@ -98,11 +98,19 @@ export const Attendance: React.FC<Props> = (props) => {
     const contextMenu = useContextMenu({ id: "attendeeMenu" });
 
     const handlePMClick = async (e: any) => {
-        const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
-        const privateRoom = ChatHelper.createRoom(conversation.id);
-        ChatHelper.current.privateRooms.push(privateRoom);
-        ChatHelper.onChange();
-        ChatHelper.joinRoom(conversation.id, conversation.churchId);
+
+        var existingRoom: ChatRoomInterface = null;
+        ChatHelper.current.privateRooms.forEach(r => {
+            if (r.conversationId === selectedConnectionId) existingRoom = r;
+        })
+
+        if (existingRoom === null) {
+            const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
+            const privateRoom = ChatHelper.createRoom(conversation.id);
+            ChatHelper.current.privateRooms.push(privateRoom);
+            ChatHelper.onChange();
+            ChatHelper.joinRoom(conversation.id, conversation.churchId);
+        }
     }
 
     function handleAttendeeContext(e: React.MouseEvent, connectionId: string) {

@@ -1,6 +1,6 @@
 import React from "react";
 import { ChatStateInterface, ConfigHelper, ChatHelper, Chat } from "..";
-import { ApiHelper, ChatRoomInterface, ConversationInterface } from "../../helpers";
+import { ApiHelper, ConversationInterface } from "../../helpers";
 
 interface Props { chatState: ChatStateInterface | undefined, visible: boolean }
 
