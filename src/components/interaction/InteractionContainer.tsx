@@ -96,13 +96,16 @@ export const InteractionContainer: React.FC<Props> = (props) => {
     React.useEffect(() => {
         if (props.config.switchToConversationId !== "" && props.config.switchToConversationId !== undefined) {
             if (props.config.tabs != null) {
+                ConfigHelper.addMissingPrivateTab();
+                var prayerTabIndex = -1;
                 for (let i = 0; i < props.config.tabs.length; i++) {
                     const t = props.config.tabs[i];
-                    if (t.type === "prayer" && selectedTab !== i) {
-                        setSelectedTab(i);
-                        ConfigHelper.current.switchToConversationId = "";
-                    }
+                    if (t.type === "prayer" && selectedTab !== i) prayerTabIndex = i;
                 }
+
+                setSelectedTab(prayerTabIndex);
+                ConfigHelper.current.switchToConversationId = "";
+
             }
 
         }

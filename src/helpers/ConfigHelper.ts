@@ -1,5 +1,5 @@
 import { ServicesHelper, EnvironmentHelper } from '.'
-import { ApiHelper, UniqueIdHelper } from '../components';
+import { ApiHelper, ChatHelper, UniqueIdHelper } from '../components';
 export interface ColorsInterface { primary: string, contrast: string, header: string }
 export interface LogoInterface { url: string, image: string }
 export interface ButtonInterface { text: string, url: string }
@@ -44,6 +44,18 @@ export class ConfigHelper {
         for (let i = 0; i < ConfigHelper.current.tabs.length; i++) {
             var t = ConfigHelper.current.tabs[i];
             if (t.type === tabType) t.updated = true;
+        }
+    }
+
+    static addMissingPrivateTab() {
+        var prayerTabIndex = -1;
+        for (let i = 0; i < ConfigHelper.current.tabs.length; i++) {
+            const t = ConfigHelper.current.tabs[i];
+            if (t.type === "prayer") prayerTabIndex = i;
+        }
+        if (prayerTabIndex === -1) {
+            ConfigHelper.current.tabs.push({ type: "prayer", icon: "fas fa-envelope", text: "Private Messages", url: "", data: "" })
+            ChatHelper.onChange();
         }
     }
 

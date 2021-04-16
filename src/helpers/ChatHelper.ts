@@ -97,8 +97,10 @@ export class ChatHelper {
     static handlePrivateMessage = (conversation: ConversationInterface) => {
         const privateRoom = ChatHelper.createRoom(conversation.id, "Private Chat");
         ChatHelper.current.privateRooms.push(privateRoom);
+        ConfigHelper.addMissingPrivateTab();
         ChatHelper.onChange();
         ChatHelper.joinRoom(conversation.id, conversation.churchId);
+
         ConfigHelper.setTabUpdated("prayer");
     }
 
