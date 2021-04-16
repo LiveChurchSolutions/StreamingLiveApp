@@ -95,10 +95,11 @@ export const Attendance: React.FC<Props> = (props) => {
     }
 
 
-    const contextMenu = useContextMenu({ id: "attendeeMenu" });
+
 
     const handlePMClick = async (e: any) => {
 
+        var conversationId = null;
         var existingRoom: ChatRoomInterface = null;
         ChatHelper.current.privateRooms.forEach(r => {
             if (r.conversationId === selectedConnectionId) existingRoom = r;
@@ -110,21 +111,23 @@ export const Attendance: React.FC<Props> = (props) => {
             ChatHelper.current.privateRooms.push(privateRoom);
             ChatHelper.onChange();
             ChatHelper.joinRoom(conversation.id, conversation.churchId);
-        }
-        ConfigHelper.current.switchToConversationId = selectedConnectionId;
+            conversationId = privateRoom.conversationId;
+        } else conversationId = existingRoom.conversationId;
+
+        ConfigHelper.current.switchToConversationId = conversationId;
         ChatHelper.onChange();
     }
+
+
+    const contextMenu = useContextMenu({ id: "attendeeMenu" });
 
     function handleAttendeeContext(e: React.MouseEvent, connectionId: string) {
         e.preventDefault();
         setSelectedConnectionId(connectionId);
-        contextMenu.hideAll();
-        contextMenu.show(e, {
-            position: {
-                x: e.pageX - 200,
-                y: e.pageY
-            }
-        });
+
+        contextMenu.show(e);
+        //The component has a bug.  It captures keyboard input to allow keyboard navigation and doesn't give it back.
+        window.addEventListener('keydown', function (event) { event.stopPropagation(); }, true);
 
     }
 

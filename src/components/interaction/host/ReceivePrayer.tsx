@@ -2,7 +2,7 @@ import React from "react";
 import { Chat } from "../"
 import { ChatStateInterface, ChatHelper, ConversationInterface, ChatRoomInterface } from "../../../helpers";
 
-interface Props { chatState: ChatStateInterface | undefined, visible: boolean }
+interface Props { chatState: ChatStateInterface | undefined, visible: boolean, switchToConversationId: string }
 
 
 export const ReceivePrayer: React.FC<Props> = (props) => {
@@ -45,7 +45,10 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         else return null;
     }*/
 
-    const selectConversation = (conversationId: string) => { setSelectedConversation(conversationId); }
+    const selectConversation = (conversationId: string) => {
+        console.log("SELECTING CONVERSATION: " + conversationId);
+        setSelectedConversation(conversationId);
+    }
 
     const getRooms = () => {
         var result: JSX.Element[] = [];
@@ -61,6 +64,18 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         });
         return result;
     }
+
+
+    React.useEffect(() => {
+        if (props.switchToConversationId !== "" && props.switchToConversationId !== undefined) {
+            const convId = props.switchToConversationId;
+            if (selectedConversation !== props.switchToConversationId) {
+                console.log("**************************");
+                console.log(convId);
+                setTimeout(() => selectConversation(convId), 300);
+            }
+        }
+    }, [props.switchToConversationId]);
 
 
 

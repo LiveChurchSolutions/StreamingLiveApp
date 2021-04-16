@@ -19,7 +19,10 @@ export const ChatSend: React.FC<Props> = (props) => {
         setMessage("");
     }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => { setMessage(e.currentTarget.value); }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e);
+        setMessage(e.currentTarget.value);
+    }
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => { if (e.keyCode === 13) sendMessage(); }
     const toggleEmojis = (e: React.MouseEvent) => { e.preventDefault(); setShowEmojis(!showEmojis); }
     const insertEmoji = (emoji: string) => { setMessage(message + emoji); }

@@ -76,7 +76,7 @@ export const InteractionContainer: React.FC<Props> = (props) => {
                         break;
                     case "prayer":
                         if (props.chatState !== null) {
-                            if (props.chatState?.user.isHost) result.push(<ReceivePrayer key={i} chatState={props.chatState} visible={visible} />);
+                            if (props.chatState?.user.isHost) result.push(<ReceivePrayer key={i} chatState={props.chatState} visible={visible} switchToConversationId={props.config.switchToConversationId} />);
                             else result.push(<RequestPrayer key={i} chatState={props.chatState} visible={visible} />);
                         }
                         break;
@@ -94,7 +94,6 @@ export const InteractionContainer: React.FC<Props> = (props) => {
 
 
     React.useEffect(() => {
-        console.log("CHECK FORCE TAB CALLED");
         if (props.config.switchToConversationId !== "" && props.config.switchToConversationId !== undefined) {
             if (props.config.tabs != null) {
                 for (let i = 0; i < props.config.tabs.length; i++) {
@@ -102,7 +101,6 @@ export const InteractionContainer: React.FC<Props> = (props) => {
                     if (t.type === "prayer" && selectedTab !== i) {
                         setSelectedTab(i);
                         ConfigHelper.current.switchToConversationId = "";
-                        ChatHelper.onChange();
                     }
                 }
             }
