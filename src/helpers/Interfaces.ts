@@ -27,6 +27,7 @@ export interface ChatEventsInterface {
 
 
 export interface ChatRoomInterface {
+    title: string,
     conversationId: string,
     attendance: AttendanceInterface,
     messages: MessageInterface[],

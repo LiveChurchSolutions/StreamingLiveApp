@@ -102,12 +102,16 @@ export const Attendance: React.FC<Props> = (props) => {
         var conversationId = null;
         var existingRoom: ChatRoomInterface = null;
         ChatHelper.current.privateRooms.forEach(r => {
-            if (r.conversationId === selectedConnectionId) existingRoom = r;
+            if (r.conversationId === selectedConnectionId) existingRoom = r;            //TODO: Fix
         })
 
         if (existingRoom === null) {
+            var title = "Private chat";
+            props.attendance.viewers.forEach(v => {
+                if (v.id === selectedConnectionId) title = "Private chat with " + v.displayName;
+            });
             const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
-            const privateRoom = ChatHelper.createRoom(conversation.id);
+            const privateRoom = ChatHelper.createRoom(conversation.id, title);
             ChatHelper.current.privateRooms.push(privateRoom);
             ChatHelper.onChange();
             ChatHelper.joinRoom(conversation.id, conversation.churchId);

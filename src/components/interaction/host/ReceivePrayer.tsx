@@ -14,7 +14,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         e.preventDefault();
         const idx = parseInt(e.currentTarget.getAttribute("data-idx"), 0);
         const conv = props.chatState.hostRoom.prayerRequests[idx];
-        const prayerRoom = ChatHelper.createRoom(conv.id);
+        const prayerRoom = ChatHelper.createRoom(conv.id, conv.title);
         ChatHelper.current.privateRooms.push(prayerRoom);
         selectConversation(conv.id);
         props.chatState.hostRoom.prayerRequests.splice(idx, 1);
@@ -46,7 +46,6 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
     }*/
 
     const selectConversation = (conversationId: string) => {
-        console.log("SELECTING CONVERSATION: " + conversationId);
         setSelectedConversation(conversationId);
     }
 
@@ -57,7 +56,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
             var className = "tab childTab";
             var visible = selectedConversation === r.conversationId;
             result.push(<a key={"anchor_" + r.conversationId.toString()} href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); selectConversation(r.conversationId); }} className={className}>
-                <i className="fas fa-chat"></i>Private Chat
+                <i className="fas fa-chat"></i>{r.title}
             </a>);
             result.push(<Chat key={r.conversationId} room={r} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={false} />);
 
@@ -70,8 +69,6 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         if (props.switchToConversationId !== "" && props.switchToConversationId !== undefined) {
             const convId = props.switchToConversationId;
             if (selectedConversation !== props.switchToConversationId) {
-                console.log("**************************");
-                console.log(convId);
                 setTimeout(() => selectConversation(convId), 300);
             }
         }

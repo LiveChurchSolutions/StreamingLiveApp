@@ -9,8 +9,9 @@ export class ChatHelper {
     static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { displayName: "Anonymous", isHost: false } };
     static onChange: () => void;
 
-    static createRoom = (conversationId: string): ChatRoomInterface => {
+    static createRoom = (conversationId: string, title: string): ChatRoomInterface => {
         return {
+            title: title,
             messages: [],
             attendance: { conversationId: conversationId, totalViewers: 0, viewers: [] },
             callout: { content: "" },
@@ -94,7 +95,7 @@ export class ChatHelper {
 
 
     static handlePrivateMessage = (conversation: ConversationInterface) => {
-        const privateRoom = ChatHelper.createRoom(conversation.id);
+        const privateRoom = ChatHelper.createRoom(conversation.id, "Private Chat");
         ChatHelper.current.privateRooms.push(privateRoom);
         ChatHelper.onChange();
         ChatHelper.joinRoom(conversation.id, conversation.churchId);
