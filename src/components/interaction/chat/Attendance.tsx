@@ -1,5 +1,5 @@
 import React from "react";
-import { AttendanceInterface, UserHelper, ConfigHelper, ChatHelper, ConversationInterface, ChatRoomInterface, ApiHelper } from "../../../helpers";
+import { AttendanceInterface, UserHelper, ChatHelper, ConversationInterface, ChatRoomInterface, ApiHelper, ConfigHelper } from "../../../helpers";
 import { Menu, Item, useContextMenu } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.css';
 
@@ -111,6 +111,8 @@ export const Attendance: React.FC<Props> = (props) => {
             ChatHelper.onChange();
             ChatHelper.joinRoom(conversation.id, conversation.churchId);
         }
+        ConfigHelper.current.switchToConversationId = selectedConnectionId;
+        ChatHelper.onChange();
     }
 
     function handleAttendeeContext(e: React.MouseEvent, connectionId: string) {

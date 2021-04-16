@@ -60,7 +60,10 @@ export const Home: React.FC = () => {
   }
 
   React.useEffect(() => {
-    ChatHelper.onChange = () => { setChatState({ ...ChatHelper.current }); }
+    ChatHelper.onChange = () => {
+      setChatState({ ...ChatHelper.current });
+      setConfig({ ...ConfigHelper.current });
+    }
     ServicesHelper.initTimer((cs) => { setCurrentService(cs) });
     loadConfig();
     setCurrentService(ServicesHelper.currentService);
@@ -75,7 +78,7 @@ export const Home: React.FC = () => {
         <Header logoUrl={config?.logoHeader} buttons={config.buttons} user={chatState?.user} nameUpdateFunction={handleNameUpdate} />
         <div id="body">
           <VideoContainer currentService={currentService} />
-          <InteractionContainer tabs={config.tabs} chatState={chatState} />
+          <InteractionContainer chatState={chatState} config={config} />
         </div>
       </div>
     </>
