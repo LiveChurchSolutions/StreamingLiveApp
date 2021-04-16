@@ -14,12 +14,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         e.preventDefault();
         const idx = parseInt(e.currentTarget.getAttribute("data-idx"), 0);
         const conv = props.chatState.hostRoom.prayerRequests[idx];
-        const prayerRoom: ChatRoomInterface = {
-            messages: [],
-            attendance: { conversationId: conv.id, totalViewers: 0, viewers: [] },
-            callout: { content: "" },
-            conversationId: conv.id
-        };
+        const prayerRoom = ChatHelper.createRoom(conv.id);
         ChatHelper.current.privateRooms.push(prayerRoom);
         selectConversation(conv.id);
         props.chatState.hostRoom.prayerRequests.splice(idx, 1);
