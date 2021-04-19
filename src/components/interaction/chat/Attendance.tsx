@@ -112,6 +112,7 @@ export const Attendance: React.FC<Props> = (props) => {
             });
             const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
             const privateRoom = ChatHelper.createRoom(conversation.id, title);
+            privateRoom.joined = true;
             ChatHelper.current.privateRooms.push(privateRoom);
             ChatHelper.onChange();
             ChatHelper.joinRoom(conversation.id, conversation.churchId);

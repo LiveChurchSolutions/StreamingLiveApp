@@ -33,6 +33,7 @@ export interface ChatRoomInterface {
     messages: MessageInterface[],
     callout: MessageInterface,
     prayerRequests?: ConversationInterface[],
+    joined: boolean
 }
 
 

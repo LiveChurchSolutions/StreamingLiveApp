@@ -28,6 +28,7 @@ export const Home: React.FC = () => {
     ChatHelper.current.mainRoom = ChatHelper.createRoom(conversation.id, "Chat");
     setChatState(ChatHelper.current);
     ChatHelper.joinRoom(conversation.id, conversation.churchId);
+    ChatHelper.current.mainRoom.joined = true;
   }
 
 
@@ -37,7 +38,10 @@ export const Home: React.FC = () => {
       const hostConversation: ConversationInterface = await ApiHelper.get("/conversations/current/" + d.churchId + "/streamingLiveHost/chat", "MessagingApi");
       ChatHelper.current.hostRoom = ChatHelper.createRoom(hostConversation.id, "Host Chat");
       setChatState(ChatHelper.current);
-      setTimeout(() => { ChatHelper.joinRoom(hostConversation.id, hostConversation.churchId); }, 500);
+      setTimeout(() => {
+        ChatHelper.joinRoom(hostConversation.id, hostConversation.churchId);
+        ChatHelper.current.hostRoom.joined = true;
+      }, 500);
     }
   }
 

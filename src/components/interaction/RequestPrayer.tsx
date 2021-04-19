@@ -10,9 +10,11 @@ export const RequestPrayer: React.FC<Props> = (props) => {
         e.preventDefault();
         const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/requestPrayer/" + ConfigHelper.current.churchId + "/" + ChatHelper.current.mainRoom.conversationId, "MessagingApi");
         const prayerRoom = ChatHelper.createRoom(conversation.id, "Private Chat");
+        prayerRoom.joined = true;
         ChatHelper.current.privateRooms.push(prayerRoom);
         ChatHelper.onChange();
         ChatHelper.joinRoom(conversation.id, conversation.churchId);
+
     }
 
     if (props.chatState.privateRooms.length !== 0) return (<Chat room={props.chatState.privateRooms[0]} user={props.chatState.user} visible={props.visible} enableAttendance={true} />)

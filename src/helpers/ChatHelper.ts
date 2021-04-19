@@ -15,7 +15,8 @@ export class ChatHelper {
             messages: [],
             attendance: { conversationId: conversationId, totalViewers: 0, viewers: [] },
             callout: { content: "" },
-            conversationId: conversationId
+            conversationId: conversationId,
+            joined: false
         };
     }
 
@@ -96,6 +97,7 @@ export class ChatHelper {
 
     static handlePrivateMessage = (conversation: ConversationInterface) => {
         const privateRoom = ChatHelper.createRoom(conversation.id, "Private Chat");
+        privateRoom.joined = true;
         ChatHelper.current.privateRooms.push(privateRoom);
         ConfigHelper.addMissingPrivateTab();
         ChatHelper.onChange();
