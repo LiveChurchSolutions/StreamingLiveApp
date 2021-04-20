@@ -31,6 +31,8 @@ export class ChatHelper {
             prayerRequestHandler: ChatHelper.handlePrayerRequest,
             disconnectHandler: ChatHelper.handleDisconnect,
             privateMessageHandler: ChatHelper.handlePrivateMessage,
+            privateRoomAddedHandler: ChatHelper.handlePrivateRoomAdded,
+
         });
     }
 
@@ -107,6 +109,24 @@ export class ChatHelper {
         ChatHelper.joinRoom(conversation.id, conversation.churchId);
 
         ConfigHelper.setTabUpdated("prayer");
+    }
+
+    static getOrCreatePrivateRoom = (conversation: ConversationInterface) => {
+        var privateRoom: ChatRoomInterface = null;
+        ChatHelper.current.privateRooms.forEach(pr => {
+            if (pr.conversation.id === conversation.id) privateRoom = pr;
+        });
+
+        if (privateRoom === null) {
+            const privateRoom = ChatHelper.createRoom(conversation);
+            ChatHelper.current.privateRooms.push(privateRoom);
+            ChatHelper.onChange();
+        }
+        return privateRoom;
+    }
+
+    static handlePrivateRoomAdded = (conversation: ConversationInterface) => {
+        ChatHelper.getOrCreatePrivateRoom(conversation);
     }
 
 
