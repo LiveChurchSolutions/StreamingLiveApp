@@ -48,9 +48,25 @@ export const Attendance: React.FC<Props> = (props) => {
         var people = [];
         for (let i = 0; i < props.attendance.viewers.length; i++) {
             const v = props.attendance.viewers[i];
-            if (v.displayName === name) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, v.id)} className="attendanceExpanded"><i className="fas fa-user-alt"></i>{v.displayName} <span className="id">{v.id}</span></div>);
+            if (v.displayName === name) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, v.id)} className="attendanceExpanded"><i className="fas fa-user-alt"></i>{v.displayName} <span className="id">{v.id}</span>{getPMIcon(v.id)}</div>);
         }
         return people;
+    }
+
+    const getPMIcon = (connectionId: string) => {
+        var result: JSX.Element = null;
+        if (UserHelper.isHost) {
+            var privateRoom: ChatRoomInterface = null;
+            ChatHelper.current.privateRooms.forEach(pr => {
+                if (pr.conversation.contentType === "privateMessage" && pr.conversation.contentId === connectionId) privateRoom = pr;
+            });
+            if (privateRoom !== null) {
+                if (privateRoom.joined) result = <i className="fas fa-comments private-active" style={{ marginLeft: 10 }} ></i>
+                else result = <i className="far fa-comments" style={{ marginLeft: 10 }} ></i>
+
+            }
+        }
+        return result;
     }
 
     const getPeopleCondensed = () => {
@@ -73,7 +89,7 @@ export const Attendance: React.FC<Props> = (props) => {
             else {
                 for (let i = 0; i < props.attendance.viewers.length; i++) {
                     const c = props.attendance.viewers[i];
-                    if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)}><i className="fas fa-user-alt"></i>{v.displayName}</div>);
+                    if (c.displayName === v.displayName) people.push(<div key={i} onContextMenu={(e) => handleAttendeeContext(e, c.id)}><i className="fas fa-user-alt"></i>{v.displayName}{getPMIcon(c.id)}</div>);
                 }
             }
 

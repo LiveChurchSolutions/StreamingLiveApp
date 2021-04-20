@@ -464,6 +464,10 @@ prayerSend {
   animation: pulse 1500ms infinite;
 }
 
+#attendance i.private-active {
+  color: var(--primaryColor);
+}
+
 @media (max-aspect-ratio: 5/3) {
   #body {
     flex-direction: column;
