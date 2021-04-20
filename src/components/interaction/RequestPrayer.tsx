@@ -8,8 +8,9 @@ export const RequestPrayer: React.FC<Props> = (props) => {
 
     const requestPrayer = async (e: React.MouseEvent) => {
         e.preventDefault();
-        const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/requestPrayer/" + ConfigHelper.current.churchId + "/" + ChatHelper.current.mainRoom.conversationId, "MessagingApi");
-        const prayerRoom = ChatHelper.createRoom(conversation.id, "Private Chat");
+        const conversation: ConversationInterface = await ApiHelper.getAnonymous("/conversations/requestPrayer/" + ConfigHelper.current.churchId + "/" + ChatHelper.current.mainRoom.conversation.id, "MessagingApi");
+        const prayerRoom = ChatHelper.createRoom(conversation);
+        prayerRoom.conversation.title = "Private Chat";
         prayerRoom.joined = true;
         ChatHelper.current.privateRooms.push(prayerRoom);
         ChatHelper.onChange();

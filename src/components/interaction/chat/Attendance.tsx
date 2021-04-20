@@ -99,27 +99,29 @@ export const Attendance: React.FC<Props> = (props) => {
 
     const handlePMClick = async (e: any) => {
 
-        var conversationId = null;
-        var existingRoom: ChatRoomInterface = null;
+        //var conversation:ConversationInterface = null;
+        //var existingRoom: ChatRoomInterface = null;
+        /*
         ChatHelper.current.privateRooms.forEach(r => {
             if (r.conversationId === selectedConnectionId) existingRoom = r;            //TODO: Fix
-        })
+        })*/
 
-        if (existingRoom === null) {
-            var title = "Private chat";
-            props.attendance.viewers.forEach(v => {
-                if (v.id === selectedConnectionId) title = "Private chat with " + v.displayName;
-            });
-            const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
-            const privateRoom = ChatHelper.createRoom(conversation.id, title);
-            privateRoom.joined = true;
-            ChatHelper.current.privateRooms.push(privateRoom);
-            ChatHelper.onChange();
-            ChatHelper.joinRoom(conversation.id, conversation.churchId);
-            conversationId = privateRoom.conversationId;
-        } else conversationId = existingRoom.conversationId;
+        //if (existingRoom === null) {
+        var title = "Private chat";
+        props.attendance.viewers.forEach(v => {
+            if (v.id === selectedConnectionId) title = "Private chat with " + v.displayName;
+        });
+        const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
+        const privateRoom = ChatHelper.createRoom(conversation);
+        privateRoom.conversation.title = title;
+        privateRoom.conversation.contentId = selectedConnectionId; //may not be needed
+        privateRoom.joined = true;
+        ChatHelper.current.privateRooms.push(privateRoom);
+        ChatHelper.onChange();
+        ChatHelper.joinRoom(conversation.id, conversation.churchId);
+        //} else conversationId = existingRoom.conversationId;
 
-        ConfigHelper.current.switchToConversationId = conversationId;
+        ConfigHelper.current.switchToConversationId = conversation.id;
         ChatHelper.onChange();
     }
 

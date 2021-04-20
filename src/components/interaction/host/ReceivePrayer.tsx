@@ -14,7 +14,7 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         e.preventDefault();
         const idx = parseInt(e.currentTarget.getAttribute("data-idx"), 0);
         const conv = props.chatState.hostRoom.prayerRequests[idx];
-        const prayerRoom = ChatHelper.createRoom(conv.id, conv.title);
+        const prayerRoom = ChatHelper.createRoom(conv);
         prayerRoom.joined = true;
         ChatHelper.current.privateRooms.push(prayerRoom);
         selectConversation(conv.id);
@@ -55,11 +55,11 @@ export const ReceivePrayer: React.FC<Props> = (props) => {
         props.chatState.privateRooms.forEach(r => {
             //var className = getFlashing(visible, t) ? "tab flashing" : "tab";
             var className = "tab childTab";
-            var visible = selectedConversation === r.conversationId;
-            result.push(<a key={"anchor_" + r.conversationId.toString()} href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); selectConversation(r.conversationId); }} className={className}>
-                <i className="fas fa-chat"></i>{r.title}
+            var visible = selectedConversation === r.conversation.id;
+            result.push(<a key={"anchor_" + r.conversation.id.toString()} href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); selectConversation(r.conversation.id); }} className={className}>
+                <i className="fas fa-chat"></i>{r.conversation.title}
             </a>);
-            result.push(<Chat key={r.conversationId} room={r} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={false} />);
+            result.push(<Chat key={r.conversation.id} room={r} user={props.chatState.user} visible={visible} enableAttendance={true} enableCallout={false} />);
 
         });
         return result;

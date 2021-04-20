@@ -9,13 +9,15 @@ export class ChatHelper {
     static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { displayName: "Anonymous", isHost: false } };
     static onChange: () => void;
 
-    static createRoom = (conversationId: string, title: string): ChatRoomInterface => {
+    static createRoom = (conversation: ConversationInterface): ChatRoomInterface => {
         return {
-            title: title,
+            //title: title,
             messages: [],
-            attendance: { conversationId: conversationId, totalViewers: 0, viewers: [] },
+            attendance: { conversationId: conversation.id, totalViewers: 0, viewers: [] },
             callout: { content: "" },
-            conversationId: conversationId,
+            //conversationId: conversationId,
+            //contentId: contentId || "",
+            conversation: conversation,
             joined: false
         };
     }
@@ -39,7 +41,7 @@ export class ChatHelper {
             if (SocketHelper.socket.readyState === SocketHelper.socket.CLOSED) {
                 ChatHelper.initChat().then(() => {
                     const mRoom = ChatHelper.current.mainRoom;
-                    ChatHelper.joinRoom(mRoom.conversationId, ConfigHelper.current.churchId);
+                    ChatHelper.joinRoom(mRoom.conversation.id, ConfigHelper.current.churchId);
                 });
             }
         }, 1000);
@@ -96,7 +98,8 @@ export class ChatHelper {
 
 
     static handlePrivateMessage = (conversation: ConversationInterface) => {
-        const privateRoom = ChatHelper.createRoom(conversation.id, "Private Chat");
+        const privateRoom = ChatHelper.createRoom(conversation);
+        privateRoom.conversation.title = "Private Chat";
         privateRoom.joined = true;
         ChatHelper.current.privateRooms.push(privateRoom);
         ConfigHelper.addMissingPrivateTab();
@@ -123,9 +126,9 @@ export class ChatHelper {
     static getRoom = (conversationId: string): ChatRoomInterface => {
         const c = ChatHelper.current;
         var result: ChatRoomInterface = null;
-        if (c.mainRoom?.conversationId === conversationId) result = c.mainRoom;
-        else if (c.hostRoom?.conversationId === conversationId) result = c.hostRoom;
-        else c.privateRooms.forEach(r => { if (r.conversationId === conversationId) result = r; });
+        if (c.mainRoom?.conversation.id === conversationId) result = c.mainRoom;
+        else if (c.hostRoom?.conversation.id === conversationId) result = c.hostRoom;
+        else c.privateRooms.forEach(r => { if (r.conversation.id === conversationId) result = r; });
         return result;
     }
 
