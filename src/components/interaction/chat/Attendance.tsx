@@ -53,13 +53,18 @@ export const Attendance: React.FC<Props> = (props) => {
         return people;
     }
 
+    const getRoomForConnection = (connectionId: string) => {
+        var privateRoom: ChatRoomInterface = null;
+        ChatHelper.current.privateRooms.forEach(pr => {
+            if (pr.conversation.contentType === "privateMessage" && pr.conversation.contentId === connectionId) privateRoom = pr;
+        });
+        return privateRoom;
+    }
+
     const getPMIcon = (connectionId: string) => {
         var result: JSX.Element = null;
         if (UserHelper.isHost) {
-            var privateRoom: ChatRoomInterface = null;
-            ChatHelper.current.privateRooms.forEach(pr => {
-                if (pr.conversation.contentType === "privateMessage" && pr.conversation.contentId === connectionId) privateRoom = pr;
-            });
+            var privateRoom: ChatRoomInterface = getRoomForConnection(connectionId);
             if (privateRoom !== null) {
                 if (privateRoom.joined) result = <i className="fas fa-comments private-active" style={{ marginLeft: 10 }} ></i>
                 else result = <i className="far fa-comments" style={{ marginLeft: 10 }} ></i>
@@ -113,34 +118,29 @@ export const Attendance: React.FC<Props> = (props) => {
 
 
 
-    const handlePMClick = async (e: any) => {
+    const handlePMClick = async (privateRoom: ChatRoomInterface) => {
 
-        //var conversation:ConversationInterface = null;
-        //var existingRoom: ChatRoomInterface = null;
-        /*
-        ChatHelper.current.privateRooms.forEach(r => {
-            if (r.conversationId === selectedConnectionId) existingRoom = r;            //TODO: Fix
-        })*/
+        if (privateRoom === null) {
+            var title = "Private chat";
+            props.attendance.viewers.forEach(v => {
+                if (v.id === selectedConnectionId) title = "Private chat with " + v.displayName;
+            });
+            const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
+            const pr = ChatHelper.getOrCreatePrivateRoom(conversation);
 
-        //if (existingRoom === null) {
-        var title = "Private chat";
-        props.attendance.viewers.forEach(v => {
-            if (v.id === selectedConnectionId) title = "Private chat with " + v.displayName;
-        });
-        const conversation: ConversationInterface = await ApiHelper.get("/conversations/privateMessage/" + selectedConnectionId, "MessagingApi");
-        //const privateRoom = ChatHelper.createRoom(conversation);
-        const privateRoom = ChatHelper.getOrCreatePrivateRoom(conversation);
-
-        privateRoom.conversation.title = title;
-        privateRoom.conversation.contentId = selectedConnectionId; //may not be needed
-        privateRoom.joined = true;
-        //ChatHelper.current.privateRooms.push(privateRoom);
-        ChatHelper.onChange();
-        ChatHelper.joinRoom(conversation.id, conversation.churchId);
-        //} else conversationId = existingRoom.conversationId;
-
-        ConfigHelper.current.switchToConversationId = conversation.id;
-        ChatHelper.onChange();
+            pr.conversation.title = title;
+            pr.conversation.contentId = selectedConnectionId; //may not be needed
+            pr.joined = true;
+            ConfigHelper.current.switchToConversationId = pr.conversation.id;
+            ChatHelper.onChange();
+            ChatHelper.joinRoom(conversation.id, conversation.churchId);
+        }
+        else {
+            privateRoom.joined = true;
+            ConfigHelper.current.switchToConversationId = privateRoom.conversation.id;
+            ChatHelper.onChange();
+            ChatHelper.joinRoom(privateRoom.conversation.id, privateRoom.conversation.churchId);
+        }
     }
 
 
@@ -156,12 +156,20 @@ export const Attendance: React.FC<Props> = (props) => {
 
     }
 
+    const getContextMenuItems = () => {
+        const privateRoom: ChatRoomInterface = getRoomForConnection(selectedConnectionId);
+
+        if (privateRoom === null) return <Item onClick={() => handlePMClick(null)}>Private Message</Item>;
+        else return <Item onClick={() => handlePMClick(privateRoom)}>Join Private Conversation</Item>;
+    }
+
     return (
         <>
             {getPeople()}
             <a id="attendanceCount" href="about:blank" onClick={toggleAttendance}>{getViewerCount()} {getChevron()}</a>
             <Menu id={"attendeeMenu"}>
-                <Item onClick={handlePMClick}>Private Message</Item>
+                {getContextMenuItems()}
+
             </Menu>
         </>
     );
