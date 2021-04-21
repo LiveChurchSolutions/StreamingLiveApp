@@ -69,6 +69,7 @@ export const Home: React.FC = () => {
     ChatHelper.onChange = () => {
       setChatState({ ...ChatHelper.current });
       setConfig({ ...ConfigHelper.current });
+      setCurrentService(ServicesHelper.currentService);
     }
     ServicesHelper.initTimer((cs) => { setCurrentService(cs) });
     loadConfig();

@@ -1,7 +1,8 @@
 import React from "react";
-import { AttendanceInterface, UserHelper, ChatHelper, ConversationInterface, ChatRoomInterface, ApiHelper, ConfigHelper } from "../../../helpers";
+import { AttendanceInterface, UserHelper, ChatHelper, ConversationInterface, ChatRoomInterface, ApiHelper, ConfigHelper, ServicesHelper } from "../../../helpers";
 import { Menu, Item, useContextMenu } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.css';
+import { SocketHelper } from "../../../helpers/SocketHelper";
 
 interface Props {
     attendance: AttendanceInterface;
@@ -143,6 +144,20 @@ export const Attendance: React.FC<Props> = (props) => {
         }
     }
 
+    const handleVideoChat = async () => {
+
+        ConfigHelper.current.services.forEach(s => {
+            console.log(s.localStartTime);
+            console.log(ServicesHelper.currentService.localStartTime)
+
+            if (s.localStartTime.getTime() === ServicesHelper.currentService.localStartTime.getTime()) {
+                console.log("match")
+                s.provider = "jitsi";
+                s.videoUrl = "StreamingLiveTest" //SocketHelper.socketId;
+            }
+        });
+    }
+
 
     const contextMenu = useContextMenu({ id: "attendeeMenu" });
 
@@ -158,9 +173,14 @@ export const Attendance: React.FC<Props> = (props) => {
 
     const getContextMenuItems = () => {
         const privateRoom: ChatRoomInterface = getRoomForConnection(selectedConnectionId);
+        const result: JSX.Element[] = []
 
-        if (privateRoom === null) return <Item onClick={() => handlePMClick(null)}>Private Message</Item>;
-        else return <Item onClick={() => handlePMClick(privateRoom)}>Join Private Conversation</Item>;
+        if (privateRoom === null) result.push(<Item onClick={() => handlePMClick(null)}>Private Message</Item>);
+        else result.push(<Item onClick={() => handlePMClick(privateRoom)}>Join Private Conversation</Item>);
+
+        result.push(<Item onClick={() => handleVideoChat()}>Invite to Video Chat</Item>);
+
+        return result;
     }
 
     return (
