@@ -1,9 +1,9 @@
 import React from "react";
 import { ServiceInterface } from ".";
-import { ChatHelper } from "../helpers";
+import { ChatHelper, ConfigHelper, UserInterface } from "../helpers";
 import { Jutsu } from 'react-jutsu'
 
-interface Props { currentService: ServiceInterface | null }
+interface Props { currentService: ServiceInterface | null, jitsiRoom: string, user: UserInterface }
 
 export const VideoContainer: React.FC<Props> = (props) => {
 
@@ -22,20 +22,26 @@ export const VideoContainer: React.FC<Props> = (props) => {
         }
     }
 
+    const leaveJitsi = () => {
+        console.log("LEAVING")
+        ConfigHelper.current.jitsiRoom = null;
+        ChatHelper.onChange();
+    }
+
     const getVideo = (cs: ServiceInterface) => {
-        var videoUrl = cs.videoUrl;
-        if (cs.provider === "jitsi") return (
-            <Jutsu
-                roomName={videoUrl}
-                displayName={ChatHelper.current.user.displayName}
-                password={videoUrl}
-                onMeetingEnd={() => console.log('Meeting has ended')}
-                loadingComponent={<p>loading ...</p>}
-                errorComponent={<p>Oops, something went wrong</p>}
-                containerStyles={{ width: '100%', height: '100%' }}
-            />
-        )
-        else {
+        if (props.jitsiRoom) {
+            return (
+                <Jutsu
+                    roomName={props.jitsiRoom}
+                    displayName={props.user.displayName}
+                    onMeetingEnd={() => { leaveJitsi() }}
+                    loadingComponent={<p>loading ...</p>}
+                    errorComponent={<p>Oops, something went wrong</p>}
+                    containerStyles={{ width: '100%', height: '100%' }}
+                />
+            )
+        } else {
+            var videoUrl = cs.videoUrl;
             if (cs.localStartTime !== undefined) {
                 var seconds = Math.floor((loadedTime - cs.localStartTime.getTime()) / 1000);
                 if (seconds > 10) {

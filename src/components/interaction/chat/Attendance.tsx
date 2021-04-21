@@ -1,8 +1,7 @@
 import React from "react";
-import { AttendanceInterface, UserHelper, ChatHelper, ConversationInterface, ChatRoomInterface, ApiHelper, ConfigHelper, ServicesHelper } from "../../../helpers";
+import { AttendanceInterface, UserHelper, ChatHelper, ConversationInterface, ChatRoomInterface, ApiHelper, ConfigHelper, UniqueIdHelper } from "../../../helpers";
 import { Menu, Item, useContextMenu } from 'react-contexify';
 import 'react-contexify/dist/ReactContexify.css';
-import { SocketHelper } from "../../../helpers/SocketHelper";
 
 interface Props {
     attendance: AttendanceInterface;
@@ -145,14 +144,10 @@ export const Attendance: React.FC<Props> = (props) => {
     }
 
     const handleVideoChat = async () => {
-        await ApiHelper.get("/conversations/videoChat/" + selectedConnectionId, "MessagingApi");
-
-        ConfigHelper.current.services.forEach(s => {
-            if (s.localStartTime.getTime() === ServicesHelper.currentService.localStartTime.getTime()) {
-                s.provider = "jitsi";
-                s.videoUrl = "StreamingLiveTestRoom" //SocketHelper.socketId;
-            }
-        });
+        var room = (ConfigHelper.current.jitsiRoom) ? ConfigHelper.current.jitsiRoom : UniqueIdHelper.generateAlphanumeric();
+        await ApiHelper.get("/conversations/videoChat/" + selectedConnectionId + "/" + room, "MessagingApi");
+        ConfigHelper.current.jitsiRoom = room;
+        ChatHelper.onChange();
     }
 
 
