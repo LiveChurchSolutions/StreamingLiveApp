@@ -1,6 +1,7 @@
 import { ChatStateInterface, AttendanceInterface, MessageInterface, ChatRoomInterface, ChatUserInterface, ConversationInterface, ConnectionInterface } from "./Interfaces";
 import { SocketHelper } from "./SocketHelper";
 import { ConfigHelper } from "./ConfigHelper";
+import { ServicesHelper } from "./ServicesHelper";
 import Cookies from 'js-cookie';
 import { ApiHelper } from "."
 
@@ -32,6 +33,7 @@ export class ChatHelper {
             disconnectHandler: ChatHelper.handleDisconnect,
             privateMessageHandler: ChatHelper.handlePrivateMessage,
             privateRoomAddedHandler: ChatHelper.handlePrivateRoomAdded,
+            videoChatInviteHandler: ChatHelper.handleVideoChatInvite,
 
         });
     }
@@ -96,6 +98,18 @@ export class ChatHelper {
         room.prayerRequests.push(conversation);
         ConfigHelper.setTabUpdated("prayer");
         ChatHelper.onChange();
+    }
+
+
+    static handleVideoChatInvite = (roomName: string) => {
+        console.log("handleVideoChatInvite called")
+        ConfigHelper.current.services.forEach(s => {
+            if (s.localStartTime.getTime() === ServicesHelper.currentService.localStartTime.getTime()) {
+                console.log("match found")
+                s.provider = "jitsi";
+                s.videoUrl = roomName
+            }
+        });
     }
 
 

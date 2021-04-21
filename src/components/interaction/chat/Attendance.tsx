@@ -145,15 +145,12 @@ export const Attendance: React.FC<Props> = (props) => {
     }
 
     const handleVideoChat = async () => {
+        await ApiHelper.get("/conversations/videoChat/" + selectedConnectionId, "MessagingApi");
 
         ConfigHelper.current.services.forEach(s => {
-            console.log(s.localStartTime);
-            console.log(ServicesHelper.currentService.localStartTime)
-
             if (s.localStartTime.getTime() === ServicesHelper.currentService.localStartTime.getTime()) {
-                console.log("match")
                 s.provider = "jitsi";
-                s.videoUrl = "StreamingLiveTest" //SocketHelper.socketId;
+                s.videoUrl = "StreamingLiveTestRoom" //SocketHelper.socketId;
             }
         });
     }

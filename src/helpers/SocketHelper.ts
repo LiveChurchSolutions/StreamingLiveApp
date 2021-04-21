@@ -43,6 +43,7 @@ export class SocketHelper {
             case "prayerRequest": SocketHelper.events.prayerRequestHandler(payload.data); break;
             case "privateMessage": SocketHelper.events.privateMessageHandler(payload.data); break;
             case "privateRoomAdded": SocketHelper.events.privateRoomAddedHandler(payload.data); break;
+            case "videoChatInvite": SocketHelper.events.videoChatInviteHandler(payload.data); break;
             case "socketId":
                 SocketHelper.socketId = payload.data;
                 break;

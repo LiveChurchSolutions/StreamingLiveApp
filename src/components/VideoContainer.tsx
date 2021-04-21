@@ -1,6 +1,6 @@
 import React from "react";
 import { ServiceInterface } from ".";
-import { UserHelper } from "../appBase/helpers";
+import { ChatHelper } from "../helpers";
 import { Jutsu } from 'react-jutsu'
 
 interface Props { currentService: ServiceInterface | null }
@@ -27,7 +27,7 @@ export const VideoContainer: React.FC<Props> = (props) => {
         if (cs.provider === "jitsi") return (
             <Jutsu
                 roomName={videoUrl}
-                displayName={UserHelper.user.displayName}
+                displayName={ChatHelper.current.user.displayName}
                 password={videoUrl}
                 onMeetingEnd={() => console.log('Meeting has ended')}
                 loadingComponent={<p>loading ...</p>}
