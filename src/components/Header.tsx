@@ -4,8 +4,8 @@ import { NavItems, UserInterface, ChatName, UserHelper, EnvironmentHelper, ApiHe
 import { AppearanceHelper } from "../appBase/helpers/AppearanceHelper";
 
 interface Props {
-    user: UserInterface,
-    nameUpdateFunction: (displayName: string) => void
+  user: UserInterface,
+  nameUpdateFunction: (displayName: string) => void
 }
 
 export const Header: React.FC<Props> = (props) => {
@@ -61,7 +61,7 @@ export const Header: React.FC<Props> = (props) => {
         if (props.logoUrl.startsWith("data:")) imgSrc = props.logoUrl;
         else imgSrc = EnvironmentHelper.ContentRoot + "/" + props.logoUrl;
     }*/
-  let imgSrc = AppearanceHelper.getLogoHeader(ConfigHelper.current?.appearance, "/images/logo.png");
+  let imgSrc = AppearanceHelper.getLogo(ConfigHelper.current?.appearance, "/images/logo.png", ConfigHelper.current?.appearance?.primaryColor || "#FFF");
 
   setTimeout(() => {
     try {

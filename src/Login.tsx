@@ -44,9 +44,6 @@ export const Login: React.FC = (props: any) => {
     if (!jwt) jwt = "";
     if (!auth) auth = "";
 
-    //const config = { ...ConfigHelper.current };
-    //const imgSrc = config.logoSquare !== undefined ? (EnvironmentHelper.ContentRoot + config.logoSquare) : ''
-
     return (
       <LoginPage
         auth={auth}
@@ -54,7 +51,7 @@ export const Login: React.FC = (props: any) => {
         requiredKeyName={true}
         jwt={jwt}
         successCallback={successCallback}
-        logoSquare={AppearanceHelper.getLogoSquare(ConfigHelper.current?.appearance, null)}
+        logo={AppearanceHelper.getLogoLight(ConfigHelper.current?.appearance, null)}
         appName="StreamingLive"
         performGuestLogin={performGuestLogin}
       />
