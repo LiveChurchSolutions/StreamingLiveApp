@@ -48,7 +48,7 @@ export const Services: React.FC = () => {
           <td className="text-right">
             <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentService(service); }}><i className="fas fa-pencil-alt"></i></a>
           </td>
-        </tr>,
+        </tr>
       );
       //idx++;
     })

@@ -20,21 +20,21 @@ export const ServiceEdit: React.FC<Props> = (props) => {
     const val = e.currentTarget.value;
     let s = { ...currentService };
     switch (e.currentTarget.name) {
-    case "serviceLabel": s.label = val; break;
-    case "serviceTime":
-      const date = new Date(val);
-      s.serviceTime = date;
-      break;
-    case "chatBefore": s.chatBefore = parseInt(val) * 60; break;
-    case "chatAfter": s.chatAfter = parseInt(val) * 60; break;
-    case "provider": s.provider = val; break;
-    case "providerKey":
-      s.providerKey = val;
-      if (s.provider === "youtube_live" || s.provider === "youtube_watchparty") s.providerKey = getYouTubeKey(s.providerKey);
-      else if (s.provider === "facebook_live") s.providerKey = getFacebookKey(s.providerKey);
-      else if (s.provider === "vimeo_live" || s.provider === "vimeo_watchparty") s.providerKey = getVimeoKey(s.providerKey);
-      break;
-    case "recurs": s.recurring = val === "true"; break;
+      case "serviceLabel": s.label = val; break;
+      case "serviceTime":
+        const date = new Date(val);
+        s.serviceTime = date;
+        break;
+      case "chatBefore": s.chatBefore = parseInt(val) * 60; break;
+      case "chatAfter": s.chatAfter = parseInt(val) * 60; break;
+      case "provider": s.provider = val; break;
+      case "providerKey":
+        s.providerKey = val;
+        if (s.provider === "youtube_live" || s.provider === "youtube_watchparty") s.providerKey = getYouTubeKey(s.providerKey);
+        else if (s.provider === "facebook_live") s.providerKey = getFacebookKey(s.providerKey);
+        else if (s.provider === "vimeo_live" || s.provider === "vimeo_watchparty") s.providerKey = getVimeoKey(s.providerKey);
+        break;
+      case "recurs": s.recurring = val === "true"; break;
     }
     setCurrentService(s);
   }
@@ -77,17 +77,17 @@ export const ServiceEdit: React.FC<Props> = (props) => {
   const setVideoUrl = () => {
     let result = currentService?.providerKey;
     switch (currentService?.provider) {
-    case "youtube_live":
-    case "youtube_watchparty":
-      result = "https://www.youtube.com/embed/" + currentService?.providerKey + "?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&disablekb=1";
-      break;
-    case "vimeo_live":
-    case "vimeo_watchparty":
-      result = "https://player.vimeo.com/video/" + currentService?.providerKey + "?autoplay=1";
-      break;
-    case "facebook_live":
-      result = "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvideo.php%3Fv%3D" + currentService?.providerKey + "&show_text=0&autoplay=1&allowFullScreen=1";
-      break;
+      case "youtube_live":
+      case "youtube_watchparty":
+        result = "https://www.youtube.com/embed/" + currentService?.providerKey + "?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&disablekb=1";
+        break;
+      case "vimeo_live":
+      case "vimeo_watchparty":
+        result = "https://player.vimeo.com/video/" + currentService?.providerKey + "?autoplay=1";
+        break;
+      case "facebook_live":
+        result = "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvideo.php%3Fv%3D" + currentService?.providerKey + "&show_text=0&autoplay=1&allowFullScreen=1";
+        break;
     }
     return currentService.videoUrl = result;
   }
@@ -98,20 +98,20 @@ export const ServiceEdit: React.FC<Props> = (props) => {
   let keyPlaceholder = "https://yourprovider.com/yoururl/"
 
   switch (currentService?.provider) {
-  case "youtube_live":
-  case "youtube_watchparty":
-    keyLabel = <>YouTube ID <span className="description">https://youtube.com/watch?v=<b style={{ color: "#24b8ff" }}>abcd1234</b></span></>;
-    keyPlaceholder = "abcd1234";
-    break;
-  case "vimeo_live":
-  case "vimeo_watchparty":
-    keyLabel = <>Vimeo ID <span className="description">https://vimeo.com/<b>123456789</b></span></>;
-    keyPlaceholder = "123456789";
-    break;
-  case "facebook_live":
-    keyLabel = <>Video ID <span className="description">https://facebook.com/video.php?v=<b>123456789</b></span></>;
-    keyPlaceholder = "123456789";
-    break;
+    case "youtube_live":
+    case "youtube_watchparty":
+      keyLabel = <>YouTube ID <span className="description">https://youtube.com/watch?v=<b style={{ color: "#24b8ff" }}>abcd1234</b></span></>;
+      keyPlaceholder = "abcd1234";
+      break;
+    case "vimeo_live":
+    case "vimeo_watchparty":
+      keyLabel = <>Vimeo ID <span className="description">https://vimeo.com/<b>123456789</b></span></>;
+      keyPlaceholder = "123456789";
+      break;
+    case "facebook_live":
+      keyLabel = <>Video ID <span className="description">https://facebook.com/video.php?v=<b>123456789</b></span></>;
+      keyPlaceholder = "123456789";
+      break;
   }
 
   let localServiceTime = currentService?.serviceTime;

@@ -15,8 +15,8 @@ export const LinkEdit: React.FC<Props> = (props) => {
     const val = e.currentTarget.value;
     let l = { ...currentLink };
     switch (e.currentTarget.name) {
-    case "text": l.text = val; break;
-    case "url": l.url = val; break;
+      case "text": l.text = val; break;
+      case "url": l.url = val; break;
     }
     setCurrentLink(l);
   }

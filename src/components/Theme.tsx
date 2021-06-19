@@ -8,7 +8,7 @@ export const Theme = () => {
     primaryColor: "#08A0CC",
     primaryContrast: "#FFFFFF",
     secondaryColor: "#FFBA1A",
-    secondaryContrast: "#000000",
+    secondaryContrast: "#000000"
   }
 
   let css = null;

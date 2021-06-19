@@ -52,7 +52,7 @@ export const Links: React.FC = () => {
             {downLink}
             <a href="about:blank" onClick={(e: React.MouseEvent) => { e.preventDefault(); setCurrentLink(link); }}><i className="fas fa-pencil-alt"></i></a>
           </td>
-        </tr>,
+        </tr>
       );
       idx++;
     })

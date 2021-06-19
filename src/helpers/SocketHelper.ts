@@ -33,17 +33,17 @@ export class SocketHelper {
 
     static handleMessage = (payload: PayloadInterface) => {
       switch (payload.action) {
-      case "attendance": SocketHelper.events.attendanceHandler(payload.data); break;
-      case "callout": SocketHelper.events.calloutHandler(payload.data); break;
-      case "deleteMessage": SocketHelper.events.deleteHandler(payload.data); break;
-      case "message": SocketHelper.events.messageHandler(payload.data); break;
-      case "prayerRequest": SocketHelper.events.prayerRequestHandler(payload.data); break;
-      case "privateMessage": SocketHelper.events.privateMessageHandler(payload.data); break;
-      case "privateRoomAdded": SocketHelper.events.privateRoomAddedHandler(payload.data); break;
-      case "videoChatInvite": SocketHelper.events.videoChatInviteHandler(payload.data); break;
-      case "socketId":
-        SocketHelper.socketId = payload.data;
-        break;
+        case "attendance": SocketHelper.events.attendanceHandler(payload.data); break;
+        case "callout": SocketHelper.events.calloutHandler(payload.data); break;
+        case "deleteMessage": SocketHelper.events.deleteHandler(payload.data); break;
+        case "message": SocketHelper.events.messageHandler(payload.data); break;
+        case "prayerRequest": SocketHelper.events.prayerRequestHandler(payload.data); break;
+        case "privateMessage": SocketHelper.events.privateMessageHandler(payload.data); break;
+        case "privateRoomAdded": SocketHelper.events.privateRoomAddedHandler(payload.data); break;
+        case "videoChatInvite": SocketHelper.events.videoChatInviteHandler(payload.data); break;
+        case "socketId":
+          SocketHelper.socketId = payload.data;
+          break;
       }
 
     }

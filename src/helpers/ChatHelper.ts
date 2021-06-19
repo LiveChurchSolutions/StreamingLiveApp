@@ -17,7 +17,7 @@ export class ChatHelper {
       //conversationId: conversationId,
       //contentId: contentId || "",
       conversation: conversation,
-      joined: false,
+      joined: false
     })
 
     static initChat = async () => SocketHelper.init({
@@ -29,7 +29,7 @@ export class ChatHelper {
       disconnectHandler: ChatHelper.handleDisconnect,
       privateMessageHandler: ChatHelper.handlePrivateMessage,
       privateRoomAddedHandler: ChatHelper.handlePrivateRoomAdded,
-      videoChatInviteHandler: ChatHelper.handleVideoChatInvite,
+      videoChatInviteHandler: ChatHelper.handleVideoChatInvite
 
     })
 
@@ -81,15 +81,15 @@ export class ChatHelper {
       if (room !== null) {
         room.messages.push(message);
         switch (room) {
-        case ChatHelper.current.mainRoom:
-          ConfigHelper.setTabUpdated("chat");
-          break;
-        case ChatHelper.current.hostRoom:
-          ConfigHelper.setTabUpdated("hostchat");
-          break;
-        default:
-          ConfigHelper.setTabUpdated("prayer");
-          break;
+          case ChatHelper.current.mainRoom:
+            ConfigHelper.setTabUpdated("chat");
+            break;
+          case ChatHelper.current.hostRoom:
+            ConfigHelper.setTabUpdated("hostchat");
+            break;
+          default:
+            ConfigHelper.setTabUpdated("prayer");
+            break;
         }
         ChatHelper.onChange();
       }
@@ -145,8 +145,8 @@ export class ChatHelper {
         room.messages = [];
         messages.forEach(m => {
           switch (m.messageType) {
-          case "message": ChatHelper.handleMessage(m); break;
-          case "callout": ChatHelper.handleCallout(m); break;
+            case "message": ChatHelper.handleMessage(m); break;
+            case "callout": ChatHelper.handleCallout(m); break;
           }
         });
       }
