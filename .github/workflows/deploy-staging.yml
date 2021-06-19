@@ -38,6 +38,6 @@ jobs:
 
       - name: Deploy API
         run: |
-          npm install
+          npm ci
           npm run deploy-staging
         
