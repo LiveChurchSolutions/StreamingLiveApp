@@ -6,7 +6,7 @@ import { ApiHelper } from "."
 
 export class ChatHelper {
 
-    static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { displayName: "Anonymous", isHost: false } };
+    static current: ChatStateInterface = { chatEnabled: false, mainRoom: null, hostRoom: null, privateRooms: [], user: { firstName: "Anonymous", lastName: "", isHost: false } };
     static onChange: () => void;
 
     static createRoom = (conversation: ConversationInterface): ChatRoomInterface => ({
@@ -169,13 +169,15 @@ export class ChatHelper {
     static getUser() {
       let name = Cookies.get("displayName");
       if (name === undefined || name === null || name === "") { name = "Anonymous"; Cookies.set("displayName", name); }
-      let result: ChatUserInterface = { displayName: name, isHost: false };
+      const [firstName, lastName] = name.split(" ");
+      let result: ChatUserInterface = { firstName, lastName: lastName || "", isHost: false };
       ChatHelper.current.user = result;
       return result;
     }
 
     static joinRoom(conversationId: string, churchId: string) {
-      const connection: ConnectionInterface = { conversationId: conversationId, churchId: churchId, displayName: ChatHelper.current.user.displayName, socketId: SocketHelper.socketId }
+      const { firstName, lastName } = ChatHelper.current.user;
+      const connection: ConnectionInterface = { conversationId: conversationId, churchId: churchId, displayName: `${firstName} ${lastName}`, socketId: SocketHelper.socketId }
       ApiHelper.postAnonymous("/connections", [connection], "MessagingApi");
       ApiHelper.getAnonymous("/messages/catchup/" + churchId + "/" + conversationId, "MessagingApi").then(messages => { ChatHelper.handleCatchup(messages) });
     }

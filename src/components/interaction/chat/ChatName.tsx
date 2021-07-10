@@ -4,31 +4,43 @@ import { Row, Col, InputGroup } from "react-bootstrap"
 
 interface Props {
     user: UserInterface,
-    updateFunction: (displayName: string) => void,
+    updateFunction: (firstName: string, lastName: string) => void,
     promptName: boolean
 }
 
 export const ChatName: React.FC<Props> = (props) => {
   const [edit, setEdit] = React.useState(false);
-  const [displayName, setDisplayName] = React.useState("");
+  const [firstName, setFirstName] = React.useState("");
+  const [lastName, setLastName] = React.useState("");
 
   const editMode = (e: React.MouseEvent) => {
     e.preventDefault();
     setEdit(true);
   }
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayName(e.currentTarget.value);
+    const val = e.currentTarget.value;
+    switch (e.currentTarget.name) {
+      case "firstName":
+        setFirstName(val);
+        break;
+      case "lastName":
+        setLastName(val);
+        break;
+      default:
+        break;
+    }
   }
 
   const handleUpdate = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (displayName.trim() === "") {
-      alert("Please enter a name");
-      setDisplayName("");
+    const trimmedFirst = firstName.trim();
+    const trimmedLast = lastName.trim();
+    if (!trimmedFirst || !trimmedLast) {
+      alert("Please enter a full name");
       return;
     }
-    if (ApiHelper.isAuthenticated) ApiHelper.post("/users/setDisplayName", { displayName: displayName.trim() }, "AccessApi");
-    props.updateFunction(displayName);
+    if (ApiHelper.isAuthenticated) ApiHelper.post("/users/setDisplayName", { firstName: trimmedFirst, lastName: trimmedLast }, "AccessApi");
+    props.updateFunction(trimmedFirst, trimmedLast);
     setEdit(false);
   }
 
@@ -39,8 +51,8 @@ export const ChatName: React.FC<Props> = (props) => {
     <Row style={{ marginRight: 0 }}>
       <Col>
         <InputGroup size="sm">
-
-          <input id="nameText" type="text" className="form-control form-control-sm" placeholder="Display name" value={displayName} onChange={handleChange} />
+          <input id="nameText" name="firstName" type="text" className="form-control form-control-sm" placeholder="John" value={firstName} onChange={handleChange} />
+          <input id="nameText" name="lastName" type="text" className="form-control form-control-sm" placeholder="Smith" value={lastName} onChange={handleChange} />
           <InputGroup.Append>
             <button id="setNameButton" className="btn btn-primary btn-sm" onClick={handleUpdate}>Update</button>
           </InputGroup.Append>

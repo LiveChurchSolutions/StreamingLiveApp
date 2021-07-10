@@ -8,7 +8,8 @@ export const Logout = () => {
   try {
     //ChatHelper.setName("Anonymous");
   } catch { }
-  UserHelper.user.displayName = "Anonymous";
+  UserHelper.user.firstName = "Anonymous";
+  UserHelper.user.lastName = "";
   UserHelper.isHost = false;
 
   const context = React.useContext(UserContext)

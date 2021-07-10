@@ -46,10 +46,12 @@ export const Home: React.FC = () => {
     }
   }
 
-  const handleNameUpdate = (displayName: string) => {
+  const handleNameUpdate = (firstName: string, lastName: string) => {
+    const displayName = `${firstName} ${lastName}`
     const data = { socketId: SocketHelper.socketId, name: displayName };
     ApiHelper.postAnonymous("/connections/setName", data, "MessagingApi");
-    ChatHelper.current.user.displayName = displayName;
+    ChatHelper.current.user.firstName = firstName;
+    ChatHelper.current.user.lastName = lastName;
     Cookies.set("displayName", displayName);
     ChatHelper.onChange();
   }
@@ -57,7 +59,9 @@ export const Home: React.FC = () => {
   const initUser = () => {
     const chatUser = ChatHelper.getUser();
     if (ApiHelper.isAuthenticated) {
-      chatUser.displayName = UserHelper.user?.displayName || "Anonymous";
+      const { firstName, lastName } = UserHelper.user;
+      chatUser.firstName = firstName || "Anonymous";
+      chatUser.lastName = lastName || "";
       chatUser.isHost = true;
       ChatHelper.current.user = chatUser;
       ChatHelper.onChange();

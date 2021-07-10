@@ -37,4 +37,4 @@ export interface ChatRoomInterface {
 }
 
 export interface ChatStateInterface { mainRoom: ChatRoomInterface, hostRoom: ChatRoomInterface, privateRooms: ChatRoomInterface[], chatEnabled: boolean, user: ChatUserInterface }
-export interface ChatUserInterface { displayName: string, isHost: boolean }
+export interface ChatUserInterface { firstName: string, lastName: string, isHost: boolean }

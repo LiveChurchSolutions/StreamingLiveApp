@@ -30,10 +30,11 @@ export const VideoContainer: React.FC<Props> = (props) => {
 
   const getVideo = (cs: ServiceInterface) => {
     if (props.jitsiRoom) {
+      const { firstName, lastName } = props.user;
       return (
         <Jutsu
           roomName={props.jitsiRoom}
-          displayName={props.user.displayName}
+          displayName={`${firstName} ${lastName}`}
           onMeetingEnd={() => { leaveJitsi() }}
           loadingComponent={<p>loading ...</p>}
           errorComponent={<p>Oops, something went wrong</p>}

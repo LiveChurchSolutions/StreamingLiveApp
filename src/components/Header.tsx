@@ -5,7 +5,7 @@ import { AppearanceHelper } from "../appBase/helpers/AppearanceHelper";
 
 interface Props {
   user: UserInterface,
-  nameUpdateFunction: (displayName: string) => void
+  nameUpdateFunction: (firstName: string, lastName: string) => void
 }
 
 export const Header: React.FC<Props> = (props) => {
@@ -14,9 +14,9 @@ export const Header: React.FC<Props> = (props) => {
 
   const toggleUserMenu = (e: React.MouseEvent) => { e.preventDefault(); setShowUserMenu(!showUserMenu); }
 
-  const updateName = (displayName: string) => {
+  const updateName = (firstName: string, lastName: string) => {
     setShowUserMenu(false);
-    props.nameUpdateFunction(displayName);
+    props.nameUpdateFunction(firstName, lastName);
   }
 
   const getLoginLink = () => {
@@ -65,8 +65,9 @@ export const Header: React.FC<Props> = (props) => {
 
   setTimeout(() => {
     try {
-      const displayName = ChatHelper.current.user.displayName;
-      if (displayName === "" || displayName === "Anonymous") {
+      const { firstName, lastName } = ChatHelper.current.user;
+      const displayName = `${firstName} ${lastName}`;
+      if (displayName.trim() === "" || displayName === "Anonymous") {
         if (!promptName) {
           setShowUserMenu(true);
           setPromptName(true);
@@ -74,6 +75,8 @@ export const Header: React.FC<Props> = (props) => {
       }
     } catch { }
   }, 30000);
+
+  const { firstName, lastName } = props.user || {};
 
   return (
     <>
@@ -86,7 +89,7 @@ export const Header: React.FC<Props> = (props) => {
             </ul>
           </div>
         </div>
-        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu}>{props.user?.displayName || "Loading"} <i className="fas fa-chevron-down"></i></a></div></div>
+        <div id="userLink"><div><a href="about:blank" onClick={toggleUserMenu}>{props.user?.firstName ? `${firstName} ${lastName}` : "Loading"} <i className="fas fa-chevron-down"></i></a></div></div>
       </div>
       {getUserMenu()}
     </>

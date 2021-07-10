@@ -13,7 +13,8 @@ export const Callout: React.FC<Props> = (props) => {
 
   const handleUpdate = (e: React.MouseEvent) => {
     e.preventDefault();
-    const msg: MessageInterface = { churchId: ConfigHelper.current.churchId, content: message, conversationId: props.room.conversation.id, displayName: ChatHelper.current.user.displayName, messageType: "callout" }
+    const { firstName, lastName } = ChatHelper.current.user;
+    const msg: MessageInterface = { churchId: ConfigHelper.current.churchId, content: message, conversationId: props.room.conversation.id, displayName: `${firstName} ${lastName}`, messageType: "callout" }
     ApiHelper.post("/messages/setCallout", msg, "MessagingApi");
     //ChatHelper.setCallout(props.roomName, message);
     setEdit(false);

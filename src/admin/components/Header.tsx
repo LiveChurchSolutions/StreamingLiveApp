@@ -47,6 +47,7 @@ export const Header: React.FC = () => {
     else return null;
   }
 
+  const { firstName, lastName } = UserHelper.user;
   return (
     <>
       <div id="navbar" className="fixed-top">
@@ -60,7 +61,7 @@ export const Header: React.FC = () => {
             </Col>
             <div className="col-6 col-lg-2-5 text-right" style={{ paddingTop: 17 }} id="navRight">
               <a href="about:blank" onClick={toggleUserMenu} id="userMenuLink">
-                <i className="fas fa-user" /> &nbsp; {UserHelper.user.displayName} <i className="fas fa-caret-down"></i>
+                <i className="fas fa-user" /> &nbsp; {firstName} {lastName} <i className="fas fa-caret-down"></i>
               </a>
             </div>
           </Row>

@@ -18,7 +18,8 @@ export const ChatSend: React.FC<Props> = (props) => {
   }
 
   const sendMessage = () => {
-    const msg: MessageInterface = { churchId: ConfigHelper.current.churchId, content: message.trim(), conversationId: props.room.conversation.id, displayName: ChatHelper.current.user.displayName, messageType: "message" }
+    const { firstName, lastName } = ChatHelper.current.user;
+    const msg: MessageInterface = { churchId: ConfigHelper.current.churchId, content: message.trim(), conversationId: props.room.conversation.id, displayName: `${firstName} ${lastName}`, messageType: "message" }
     ApiHelper.postAnonymous("/messages/send", [msg], "MessagingApi");
     setMessage("");
   }
