@@ -66,8 +66,8 @@ export const Header: React.FC = () => {
             </div>
           </Row>
         </Container>
+        {getUserMenu()}
       </div>
-      {getUserMenu()}
       <div id="navSpacer"></div>
     </>
   );

@@ -6,7 +6,7 @@ import { Permissions } from "./"
 
 interface Props { prefix?: String }
 
-export const NavItems: React.FC<Props> = (props) => {
+export const NavItems = ({ prefix }: Props) => {
 
   const location = useLocation()
 
@@ -18,13 +18,13 @@ export const NavItems: React.FC<Props> = (props) => {
   }
 
   const getClass = (sectionName: string): string => {
-    if (sectionName === getSelected()) return "nav-link active";
-    else return "nav-link";
+    if (sectionName === getSelected()) return prefix === "main" ? "nav-link active" : "active";
+    else return prefix === "main" ? "nav-link" : "";
   }
 
   const getTab = (key: string, url: string, icon: string, label: string) => {
-    if (url.indexOf("://") > -1) return (<li key={key} className="nav-item" id={(props.prefix || "") + key + "Tab"}><a className={getClass(key)} href={url}><i className={icon}></i> {label}</a></li>);
-    return (<li key={key} className="nav-item" id={(props.prefix || "") + key + "Tab"}><Link className={getClass(key)} to={url}><i className={icon}></i> {label}</Link></li>);
+    if (url.indexOf("://") > -1) return (<li key={key} className="nav-item" id={(prefix || "") + key + "Tab"}><a className={getClass(key)} href={url}><i className={icon}></i> {label}</a></li>);
+    return (<li key={key} className="nav-item" id={(prefix || "") + key + "Tab"}><Link className={getClass(key)} to={url}><i className={icon}></i> {label}</Link></li>);
   }
 
   const getTabs = () => {
